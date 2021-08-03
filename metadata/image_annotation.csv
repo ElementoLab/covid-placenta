@@ -1,0 +1,166 @@
+image_file,tissue,id,magnification,marker,patient_id,tissue_name
+data/C_4 26799/CD3/CP 1 CD3-10X.tiff,CP,1,10X,CD3,C_4 26799,Chorionic Plate
+data/C_4 26799/CD3/CP 1 CD3-40X.tiff,CP,1,40X,CD3,C_4 26799,Chorionic Plate
+data/C_4 26799/CD3/CP 2 CD3-40X.tiff,CP,2,40X,CD3,C_4 26799,Chorionic Plate
+data/C_4 26799/CD3/FV 1 CD3-40X.tiff,FV,1,40X,CD3,C_4 26799,Fetal Villi
+data/C_4 26799/CD3/FV 3 CD3-10X.tiff,FV,3,10X,CD3,C_4 26799,Fetal Villi
+data/C_4 26799/CD3/FV 4 CD3-10X.tiff,FV,4,10X,CD3,C_4 26799,Fetal Villi
+data/C_4 26799/CD3/MBS 1 CD3-40X.tiff,MBS,1,40X,CD3,C_4 26799,Maternal Blood Space
+data/C_4 26799/CD3/MBS 2 CD3-40X.tiff,MBS,2,40X,CD3,C_4 26799,Maternal Blood Space
+data/C_4 26799/CD3/MD 1 CD3-10X.tiff,MD,1,10X,CD3,C_4 26799,Maternal Decidua
+data/C_4 26799/CD3/MD 1-40X.tiff,MD,1,40X,CD3,C_4 26799,Maternal Decidua
+data/C_4 26799/CD3/MD 2 CD3-10X.tiff,MD,2,10X,CD3,C_4 26799,Maternal Decidua
+data/C_4 26799/CD3/MD 2-40X.tiff,MD,2,40X,CD3,C_4 26799,Maternal Decidua
+data/C_4 26799/CD3/MD 3 CD3-10X.tiff,MD,3,10X,CD3,C_4 26799,Maternal Decidua
+data/C_4 26799/CD3/MD 3 CD3-40X.tiff,MD,3,40X,CD3,C_4 26799,Maternal Decidua
+data/C_4 26799/CD4/CP 1 CD4-10X.tiff,CP,1,10X,CD4,C_4 26799,Chorionic Plate
+data/C_4 26799/CD4/CP 1 CD4-40X.tiff,CP,1,40X,CD4,C_4 26799,Chorionic Plate
+data/C_4 26799/CD4/CP 2 CD4-10X.tiff,CP,2,10X,CD4,C_4 26799,Chorionic Plate
+data/C_4 26799/CD4/CP 2 CD4-40X.tiff,CP,2,40X,CD4,C_4 26799,Chorionic Plate
+data/C_4 26799/CD4/FV 1 CD4-10X.tiff,FV,1,10X,CD4,C_4 26799,Fetal Villi
+data/C_4 26799/CD4/FV 2 CD4-10X.tiff,FV,2,10X,CD4,C_4 26799,Fetal Villi
+data/C_4 26799/CD4/FV 3 CD4-40X.tiff,FV,3,40X,CD4,C_4 26799,Fetal Villi
+data/C_4 26799/CD4/MBS 1 CD4-40X.tiff,MBS,1,40X,CD4,C_4 26799,Maternal Blood Space
+data/C_4 26799/CD4/MD 1 CD4-10X.tiff,MD,1,10X,CD4,C_4 26799,Maternal Decidua
+data/C_4 26799/CD4/MD 1 CD4-40X.tiff,MD,1,40X,CD4,C_4 26799,Maternal Decidua
+data/C_4 26799/CD56/CP 1 CD56-10X.tiff,CP,1,10X,CD56,C_4 26799,Chorionic Plate
+data/C_4 26799/CD56/CP 1 CD56-40X.tiff,CP,1,40X,CD56,C_4 26799,Chorionic Plate
+data/C_4 26799/CD56/CP 2 CD56-10X.tiff,CP,2,10X,CD56,C_4 26799,Chorionic Plate
+data/C_4 26799/CD56/CP 2 CD56-40X.tiff,CP,2,40X,CD56,C_4 26799,Chorionic Plate
+data/C_4 26799/CD56/CP 3 CD56-10X.tiff,CP,3,10X,CD56,C_4 26799,Chorionic Plate
+data/C_4 26799/CD56/FV 1 CD56-10X.tiff,FV,1,10X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/FV 2 CD56-10X.tiff,FV,2,10X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/FV 3 CD56-10X.tiff,FV,3,10X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/FV 4 CD56-10X.tiff,FV,4,10X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/FV 5 CD56-10X.tiff,FV,5,10X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/FV 6 CD56-40X.tiff,FV,6,40X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/FV 7 CD56-40X.tiff,FV,7,40X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/FV 8 CD56-40X.tiff,FV,8,40X,CD56,C_4 26799,Fetal Villi
+data/C_4 26799/CD56/MBS 1 CD56-10X.tiff,MBS,1,10X,CD56,C_4 26799,Maternal Blood Space
+data/C_4 26799/CD56/MBS 1 CD56-40X.tiff,MBS,1,40X,CD56,C_4 26799,Maternal Blood Space
+data/C_4 26799/CD56/MBS 2 CD56-40X.tiff,MBS,2,40X,CD56,C_4 26799,Maternal Blood Space
+data/C_4 26799/CD56/MD 1 CD56-10X.tiff,MD,1,10X,CD56,C_4 26799,Maternal Decidua
+data/C_4 26799/CD56/MD 1 CD56-40X.tiff,MD,1,40X,CD56,C_4 26799,Maternal Decidua
+data/C_4 26799/CD56/MD 2 CD56-10X.tiff,MD,2,10X,CD56,C_4 26799,Maternal Decidua
+data/C_4 26799/CD56/MD 3 CD56-10X.tiff,MD,3,10X,CD56,C_4 26799,Maternal Decidua
+data/C_4 26799/CD56/MD 4 CD56-10X.tiff,MD,4,10X,CD56,C_4 26799,Maternal Decidua
+data/C_4 26799/CD56/MD 5 CD56-10X.tiff,MD,5,10X,CD56,C_4 26799,Maternal Decidua
+data/H_2 14059/CD3/CP  1 CD3-10X.tiff,CP,1,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  1 CD3-40X.tiff,CP,1,40X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  2 CD3-10X.tiff,CP,2,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  2 CD3-40X.tiff,CP,2,40X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  3 CD3-10X.tiff,CP,3,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  3 CD3-40X.tiff,CP,3,40X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  4 CD3-10X.tiff,CP,4,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  4 CD3-40X.tiff,CP,4,40X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  5 CD3-10X.tiff,CP,5,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  5 CD3-40X.tiff,CP,5,40X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  6 CD3-10X.tiff,CP,6,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP  6 CD3-40X.tiff,CP,6,40X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP 2 CD3-10X.tiff,CP,2,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP 3 CD3-10X.tiff,CP,3,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/CP 5 CD3-10X.tiff,CP,5,10X,CD3,H_2 14059,Chorionic Plate
+data/H_2 14059/CD3/FV 1 CD3-10X .tiff,FV,1,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 10 CD3-10X.tiff,FV,10,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 11 CD3-10X.tiff,FV,11,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 12 CD3-10X.tiff,FV,12,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 13 CD3-10X.tiff,FV,13,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 14 CD3-10X.tiff,FV,14,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 15 CD3-10X.tiff,FV,15,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 16-CD3 10X.tiff,FV,16-CD3,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 2 CD3-10X .tiff,FV,2,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 3 CD3-10X .tiff,FV,3,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 4 CD3-10X .tiff,FV,4,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 5 CD3-10X .tiff,FV,5,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 6 CD3-10X.tiff,FV,6,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 7 CD3-10X.tiff,FV,7,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 8 CD3-10X.tiff,FV,8,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/FV 9 CD3-10X.tiff,FV,9,10X,CD3,H_2 14059,Fetal Villi
+data/H_2 14059/CD3/MBS 1 CD3-40X.tiff,MBS,1,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MBS 2 CD3-40X.tiff,MBS,2,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MBS 3 CD-40X.tiff,MBS,3,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MBS 4 CD3-40X.tiff,MBS,4,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MBS 5 CD3-40X.tiff,MBS,5,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MBS 6 CD3-40X.tiff,MBS,6,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MBS 7 CD3-40X.tiff,MBS,7,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MBS 9 CD3-40X.tiff,MBS,9,40X,CD3,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD3/MD 1 CD3-10X.tiff,MD,1,10X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 1 CD3-40X.tiff,MD,1,40X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 2 CD3-10X.tiff,MD,2,10X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 2 CD3-40X.tiff,MD,2,40X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 3 CD3-10X.tiff,MD,3,10X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 3 CD3-40X.tiff,MD,3,40X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 4 CD3-10X.tiff,MD,4,10X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 4 CD3-40X.tiff,MD,4,40X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 5 CD3-10X.tiff,MD,5,10X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 5 CD3-40X.tiff,MD,5,40X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD3/MD 6 CD3-10X.tiff,MD,6,10X,CD3,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/CP  1 CD4-10X.tiff,CP,1,10X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  1 CD4-40X.tiff,CP,1,40X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  2 CD4-10X.tiff,CP,2,10X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  2 CD4-40X.tiff,CP,2,40X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  3 CD4-10X.tiff,CP,3,10X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  3 CD4-40X.tiff,CP,3,40X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  4 CD4-10X.tiff,CP,4,10X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  4 CD4-40X.tiff,CP,4,40X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  5 CD4-10X.tiff,CP,5,10X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  5 CD4-40X.tiff,CP,5,40X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  6 CD4-10X.tiff,CP,6,10X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/CP  6 CD4-40X.tiff,CP,6,40X,CD4,H_2 14059,Chorionic Plate
+data/H_2 14059/CD4/FV 1 CD4-10X.tiff,FV,1,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 10 CD4-10X.tiff,FV,10,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 2 CD4-10X.tiff,FV,2,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 3 CD4-10X.tiff,FV,3,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 4 CD4-10X.tiff,FV,4,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 5 CD4-10X.tiff,FV,5,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 6 CD4-10X.tiff,FV,6,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 7 CD4-10X.tiff,FV,7,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 8 CD4-10X.tiff,FV,8,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/FV 9 CD4-10X.tiff,FV,9,10X,CD4,H_2 14059,Fetal Villi
+data/H_2 14059/CD4/IVS 1 CD4-40X.tiff,IVS,1,40X,CD4,H_2 14059,Intervillous space
+data/H_2 14059/CD4/IVS 2 CD4-40X.tiff,IVS,2,40X,CD4,H_2 14059,Intervillous space
+data/H_2 14059/CD4/IVS 3 CD4-40X.tiff,IVS,3,40X,CD4,H_2 14059,Intervillous space
+data/H_2 14059/CD4/IVS 4 CD4-40X.tiff,IVS,4,40X,CD4,H_2 14059,Intervillous space
+data/H_2 14059/CD4/IVS 5 CD4-40X.tiff,IVS,5,40X,CD4,H_2 14059,Intervillous space
+data/H_2 14059/CD4/MBS + IVS 5 CD4-40X.tiff,MBS_IVS,5,40X,CD4,H_2 14059,Maternal Blood Space + Intervillous space
+data/H_2 14059/CD4/MBS 1 CD4-40X.tiff,MBS,1,40X,CD4,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD4/MBS 2 CD4-40X.tiff,MBS,2,40X,CD4,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD4/MBS 3 CD4-40X.tiff,MBS,3,40X,CD4,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD4/MBS 4 CD4-40X.tiff,MBS,4,40X,CD4,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD4/MD 1 CD4-10X.tiff,MD,1,10X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 1 CD4-40X.tiff,MD,1,40X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 2 CD4-10X.tiff,MD,2,10X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 2 CD4-40X.tiff,MD,2,40X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 3 CD4-10X.tiff,MD,3,10X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 3 CD4-40X.tiff,MD,3,40X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 4 CD4-10X.tiff,MD,4,10X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 4 CD4-40X.tiff,MD,4,40X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 5 CD4-10X.tiff,MD,5,10X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD4/MD 5 CD4-40X.tiff,MD,5,40X,CD4,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/CP 1 CD56-10X.tiff,CP,1,10X,CD56,H_2 14059,Chorionic Plate
+data/H_2 14059/CD56/CP 1 CD56-40X.tiff,CP,1,40X,CD56,H_2 14059,Chorionic Plate
+data/H_2 14059/CD56/CP 2 CD56-10X.tiff,CP,2,10X,CD56,H_2 14059,Chorionic Plate
+data/H_2 14059/CD56/CP 2 CD56-40X.tiff,CP,2,40X,CD56,H_2 14059,Chorionic Plate
+data/H_2 14059/CD56/CP 3 CD56-40X.tiff,CP,3,40X,CD56,H_2 14059,Chorionic Plate
+data/H_2 14059/CD56/FV 1-CD56 10X.tiff,FV,1-CD56,10X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 2-CD56 40X.tiff,FV,2-CD56,40X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 3 CD56-10X.tiff,FV,3,10X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 4 CD56-40X FV.tiff,FV,4,40X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 5 CD56-10X.tiff,FV,5,10X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 6 CD56-40X.tiff,FV,6,40X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 7 CD56-10X.tiff,FV,7,10X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 8 CD56-10X.tiff,FV,8,10X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/FV 9 CD56-10X.tiff,FV,9,10X,CD56,H_2 14059,Fetal Villi
+data/H_2 14059/CD56/IVS 1 CD56-40X.tiff,IVS,1,40X,CD56,H_2 14059,Intervillous space
+data/H_2 14059/CD56/MBS + IV 1 CD56-40X.tiff,MBS_IVS,1,40X,CD56,H_2 14059,Maternal Blood Space + Intervillous space
+data/H_2 14059/CD56/MBS 1 CD56-40X.tiff,MBS,1,40X,CD56,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD56/MBS 2 CD56-40X.tiff,MBS,2,40X,CD56,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD56/MBS 3 CD56-40X.tiff,MBS,3,40X,CD56,H_2 14059,Maternal Blood Space
+data/H_2 14059/CD56/MD 1 CD56-10X.tiff,MD,1,10X,CD56,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/MD 1 CD56-40X.tiff,MD,1,40X,CD56,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/MD 2 CD56-10X.tiff,MD,2,10X,CD56,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/MD 2 CD56-40X.tiff,MD,2,40X,CD56,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/MD 3 CD56-10X.tiff,MD,3,10X,CD56,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/MD 3 CD56-40X.tiff,MD,3,40X,CD56,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/MD 4 CD56-40X.tiff,MD,4,40X,CD56,H_2 14059,Maternal Decidua
+data/H_2 14059/CD56/MD 5 CD56-40X.tiff,MD,5,40X,CD56,H_2 14059,Maternal Decidua
