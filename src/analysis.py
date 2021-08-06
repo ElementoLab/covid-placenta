@@ -38,37 +38,43 @@ def main() -> int:
     model.thresholds = {"prob": 0.5, "nms": 0.3}
     for image in tqdm(images):
         image.normalize_illumination = False
-        # if image.mask_file_name.exists():
-        #     continue
-        mag = int(annot.loc[image.fname, "magnification"].replace("X", ""))
-        if mag == 10:
+        if image.mask_file_name.exists():
             continue
+        mag = int(annot.loc[image.fname, "magnification"].replace("X", ""))
+        # if mag == 10:
+        #     continue
         if model.name.endswith("fluo"):
             h = image.decompose_hdab()[0]
             h[h < 0] = 0
             h = h / 0.15
-            if mag != 10:
-                h = resize_magnification(h, mag / 10)
-            mask, _ = model.predict_instances(h)
         elif model.name.endswith("he"):
             h = image.image / 255
-            if mag != 10:
-                h = resize_magnification(h, mag / 10)
-            mask, _ = model.predict_instances(h)
+        if mag != 10:
+            h = resize_magnification(h, mag / 10)
+        mask, _ = model.predict_instances(h)
         if mag != 10:
             mask = resize_magnification(mask, 10 / mag)
             mask2 = np.zeros(mask.shape, dtype=np.uint)
             for i, n in enumerate(sorted(np.unique(mask))[1:]):
                 mask2[mask == n] = i
             mask = mask2
+        assert mask.shape == image.image.shape[:-1]
         tifffile.imwrite(image.mask_file_name, mask)
 
     # Visualize decompositin and segmentation
     visualize(images, c.results_dir)
 
+    for image in images:
+        q = (
+            c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())
+        ).as_posix()
+        if q == n:
+            break
+
     # Quantify
     _quant = list()
-    for image in tqdm(images):
+    image = images[0]
+    for image in tqdm(images[images.index(image) :]):
         f = (
             c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())
         ).as_posix()
@@ -79,7 +85,7 @@ def main() -> int:
         q["norm_hematoxilyn"] = (q["hematoxilyn"] - m0) / s0
         q["norm_diaminobenzidine"] = (q["diaminobenzidine"] - m1) / s1
         _quant.append(q.assign(file=f))
-    quant = pd.concat(_quant)
+    quant = pd.concat(_quant).drop_duplicates()
     annot["file"] = [
         (c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())).as_posix()
         for image in images
@@ -98,7 +104,7 @@ def main() -> int:
         "norm_diaminobenzidine",
     ]
     colors = ["blue", "orange", "blue", "orange"]
-    for ax, var, color in zip(axes, markers, colors):
+    for ax, var, color in zip(axes.flat, markers, colors):
         sns.histplot(quant[var], ax=ax, bins=200, rasterized=True, color=color)
     fig.savefig(c.results_dir / "intensity_values.histplot.svg", **c.figkws)
 
@@ -145,34 +151,44 @@ def main() -> int:
         c.results_dir / "percent_positive.per_marker.swarmboxenplot.svg", **c.figkws
     )
 
-    markers = annot["marker"].unique()
-    fig, axes = plt.subplots(1, len(markers), figsize=(len(markers) * 4, 1 * 4))
-    # _stats = list()
-    for marker, ax in zip(markers, axes.T):
-        pp = p.query(f"marker == '{marker}' & magnification == '10X'")
-        # stats = swarmboxenplot(
-        swarmboxenplot(
-            data=pp,
-            x="tissue_name",
-            y="percent_positive",
-            hue="patient_id",
-            test=False,
-            swarm=True,
-            ax=ax,
-        )
-        # _stats.append(stats.assign(marker=marker))
-        ax.set_title(marker)
-    # stats = pd.concat(_stats)
-    # stats.to_csv(c.results_dir / "percent_positive.per_marker.statistics.csv")
-    fig.savefig(
-        c.results_dir / "percent_positive.only_10X.per_marker.swarmboxenplot.svg",
-        **c.figkws,
-    )
-
     # Visualize decomposition, segmentation and thresholding jointly
     visualize(images, c.results_dir, quant)
 
     return 0
+
+
+def _fix_file_structure():
+    """
+    Function to homogeneize file structures across cases.
+    Should only be run once.
+    """
+    import os
+    import shutil
+
+    # Clean slate
+    d = c.data_dir / r"H_1\ 7730"
+    os.system(f"rm -r {d}")
+    # Extract
+    f = c.data_dir / r"H_1\ 7730.zip"
+    os.system(f"unzip -d {d} {f}")
+    # remove 'extra' files
+    os.system(f"find {d} -name '.DS_Store' -delete")
+    os.system(f"find {d} -name '*.czi' -delete")
+    # remove unpaired files
+    os.system(f"find {d} -name 'CD 10-20Xd.tiff_metadata.xml' -delete")
+    os.system(f"find {d} -name 'CD3 7-10Xd.tiff_metadata.xml' -delete")
+    for marker in (c.data_dir / "H_1 7730").iterdir():
+        for tissue in sorted([f for f in marker.iterdir() if f.is_dir()]):
+            for file in tissue.iterdir():
+                end = ".tiff" + file.as_posix().split(".tiff")[1]
+                s = file.stem.replace(" d side", "_d_side").replace(" c  side", "_c_side")
+                p = s.split(" ")[1:]
+                n, mag = p if "-" not in p[0] else p[0].split("-")
+                mag = mag.split(".")[0]
+                new = tissue + f" {n} {marker.name}-{mag}{end}"
+                assert not new.exists()
+                file.replace(new)
+            shutil.rmtree(tissue)
 
 
 def get_files(
@@ -222,7 +238,15 @@ def get_files(
     df = pd.DataFrame(
         _df, index=["tissue", "id", "magnification", "marker", "patient_id"]
     ).T.rename_axis(index="image_file")
-    df["magnification"] = df["magnification"].str.replace(r".*-", "", regex=True)
+    df["id"] = df["id"].str.replace(r"-.*", "", regex=True)
+    df["magnification"] = (
+        df["magnification"]
+        .str.replace(r".*-", "", regex=True)
+        .str.replace(r"X.*", "", regex=True)
+        .replace("m_d_side", "20")
+        .replace("m_c_side", "20")
+        + "X"
+    )
     df["tissue_name"] = df["tissue"].replace(abbrv)
     return images, df
 
@@ -247,7 +271,7 @@ def check_white_balance(images: tp.Sequence[Image]) -> tp.Dict[str, float]:
     return _wbos
 
 
-def resize_magnification(arr: Array, fraction: float):
+def resize_magnification(arr: Array, fraction: float) -> Array:
     import skimage
 
     assert fraction > 0
@@ -262,7 +286,7 @@ def resize_magnification(arr: Array, fraction: float):
     x, y = arr.shape[0] // f, arr.shape[1] // f
     if fraction < 1:
         out = arr[:x, :y, ...]
-        out_shape = (x * f, y * f, arr.shape[2])
+        out_shape = arr.shape
         out = skimage.transform.resize(out, out_shape, order=0)
     else:
         out = np.zeros(arr.shape)
