@@ -23,10 +23,9 @@ get_image_from_url: tp.Callable
 upload_image: tp.Callable
 get_urls: tp.Callable
 get_population: tp.Callable
-quantify_cell_intensity: tp.Callable
 
 from imc.operations import get_population
-from imc.operations import quantify_cell_intensity
+from imc.operations import quantify_cell_intensity, quantify_cell_morphology
 
 
 def minmax_scale(x: Array) -> Array:
@@ -90,6 +89,21 @@ def simplest_cb(img: Array, percent: float = 1) -> Array:
     return cv2.merge(out_channels)
 
 
+def downcast_int(arr: Array, kind: str = "u") -> Array:
+    """
+    Downcast numpy array of integers dependent
+    on largest number in array compatible with smaller bit depth.
+    """
+    assert kind in ["u", "i"]
+    if kind == "u":
+        assert arr.min() >= 0
+    m = arr.max()
+    for i in [8, 16, 32, 64]:
+        if m <= (2 ** i - 1):
+            return arr.astype(f"{kind}int{i}")
+    return arr
+
+
 metadata_dir: Path
 data_dir: Path
 results_dir: Path
@@ -112,7 +126,8 @@ class Image:
         self.image_file_name = image_file_name.absolute()
         self.image_url = image_url
         self.mask_file_name = (
-            mask_file_name or self.image_file_name.replace_(".tif", ".stardist_mask.tiff")
+            mask_file_name
+            or self.image_file_name.replace_(".tiff", ".stardist_mask.tiff")
         ).absolute()
         self.mask_url = mask_url
         self.col: ImageCollection = None
@@ -215,13 +230,22 @@ class Image:
         # dab = minmax_scale(dab2)
         # return np.stack([dab, hema])
 
-    def quantify(self, **kwargs):
-        quant = quantify_cell_intensity(
-            self.decompose_hdab(**kwargs), self.mask, border_objs=True
-        )
-        quant.columns = ["hematoxilyn", "diaminobenzidine"]
-        quant.index.name = "cell_id"
-        return quant.assign(image=self.name, marker=self.marker)
+    def quantify(self, morphology: bool = True, normalize: bool = True, **kwargs):
+        d = self.decompose_hdab(**kwargs)
+        q = quantify_cell_intensity(d, self.mask, border_objs=True)
+        q.columns = ["hematoxilyn", "diaminobenzidine"]
+        q.index.name = "cell_id"
+
+        if normalize:
+            m0, s0 = d[0].mean(), d[0].std()
+            m1, s1 = d[1].mean(), d[1].std()
+            q["norm_hematoxilyn"] = (q["hematoxilyn"] - m0) / s0
+            q["norm_diaminobenzidine"] = (q["diaminobenzidine"] - m1) / s1
+
+        if morphology:
+            m = quantify_cell_morphology(self.mask, border_objs=True)
+            q = q.join(m)
+        return q.assign(image=self.name, marker=self.marker)
 
 
 class ImageCollection:

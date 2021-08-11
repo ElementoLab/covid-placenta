@@ -15,20 +15,21 @@ import tifffile
 from tqdm import tqdm
 from seaborn_extensions import swarmboxenplot
 from stardist.models import StarDist2D
+import parmap
 
 from src._config import Config as c
-from src.types import Path
-from src.ihclib import Image
+from src.types import Path, DataFrame
+from src.ihclib import Image, downcast_int
 
 Array = tp.Union[np.ndarray]
 
 
 def main() -> int:
-    images, annot = get_files(c.data_dir)
+    images, annot = get_files(input_dir=c.data_dir, exclude_patterns=["_old", "mask"])
     annot.to_csv(c.metadata_dir / "image_annotation.csv")
 
-    # Check white balance is the same for all iamges
-    wbos = pd.Series(check_white_balance(images))
+    # # Check white balance is the same for all iamges
+    # wbos = pd.Series(check_white_balance(images))
 
     # Segment
     model = StarDist2D.from_pretrained("2D_versatile_fluo")
@@ -38,8 +39,6 @@ def main() -> int:
         if image.mask_file_name.exists():
             continue
         mag = int(annot.loc[image.fname, "magnification"].replace("X", ""))
-        # if mag == 10:
-        #     continue
         if model.name.endswith("fluo"):
             h = image.decompose_hdab()[0]
             h[h < 0] = 0
@@ -55,59 +54,134 @@ def main() -> int:
             for i, n in enumerate(sorted(np.unique(mask))[1:]):
                 mask2[mask == n] = i
             mask = mask2
+        mask = downcast_int(mask)
         assert mask.shape == image.image.shape[:-1]
         tifffile.imwrite(image.mask_file_name, mask)
 
     # Visualize decompositin and segmentation
     visualize(images, c.results_dir)
 
-    for image in images:
-        q = (
-            c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())
-        ).as_posix()
-        if q == n:
-            break
-
     # Quantify
-    _quant = list()
-    image = images[0]
-    for image in tqdm(images[images.index(image) :]):
-        f = (
-            c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())
-        ).as_posix()
-        q = image.quantify()[["hematoxilyn", "diaminobenzidine"]]
-        d = image.decompose_hdab(normalize=False)
-        m0, s0 = d[0].mean(), d[0].std()
-        m1, s1 = d[1].mean(), d[1].std()
-        q["norm_hematoxilyn"] = (q["hematoxilyn"] - m0) / s0
-        q["norm_diaminobenzidine"] = (q["diaminobenzidine"] - m1) / s1
-        _quant.append(q.assign(file=f))
+    _quant = parmap.map(quantify, images, pm_pbar=True)
     quant = pd.concat(_quant).drop_duplicates()
-    annot["file"] = [
-        (c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())).as_posix()
-        for image in images
-    ]
-    quant = quant.reset_index().merge(annot, on="file")
-    quant.to_csv(c.results_dir / "image_quantification.csv", index=False)
+    annot["file"] = [image.fname for image in images]
+    quant = (
+        quant.reset_index()
+        .merge(annot.drop(["marker"], axis=1), on="file")
+        .set_index("cell_id")
+    )
+    quant.to_csv(c.results_dir / "image_quantification.csv")
 
     # Read in
     quant = pd.read_csv(c.results_dir / "image_quantification.csv", index_col=0)
     thresh = 0
 
+    # Plot morphology
+    fig, axes = plt.subplots(2, 2, figsize=(4.2 * 2, 4 * 2))
+    vars_ = [
+        "area",
+        "major_axis_length",
+        "solidity",
+        "eccentricity",
+    ]
+    colors = ["blue", "orange", "blue", "orange"]
+    for ax, var, color in zip(axes.flat, vars_, colors):
+        sns.histplot(quant[var], ax=ax, bins=200, rasterized=True, color=color)
+    fig.savefig(c.results_dir / "morphology.histplot.svg", **c.figkws)
+
+    # # Per marker, tissue, donor
+    markers = annot["marker"].unique()
+    tissues = annot["tissue_name"].unique()
+    donors = annot["donor_id"].unique()
+    for marker in markers:
+        n, m = len(tissues), len(donors)
+        fig, axes = plt.subplots(n, m, figsize=(m * 2, n * 2), sharey=True)
+        for i, tissue in enumerate(tissues):
+            for j, donor in enumerate(donors):
+                p = quant.query(
+                    f"tissue_name == '{tissue}' & donor_id == '{donor}' & marker == '{marker}'"
+                )
+                if p.empty:
+                    axes[i, j].axis("off")
+                    continue
+                sns.histplot(
+                    p["norm_diaminobenzidine"],
+                    stat="density",
+                    ax=axes[i, j],
+                    bins=200,
+                    rasterized=True,
+                )
+                axes[i, j].axvline(thresh, linestyle="--", color="grey")
+                f = (p["norm_diaminobenzidine"] > 0).sum() / p.shape[0]
+                axes[i, j].text(2, 1, s=f"{f * 100:.1f}%", ha="right")
+                axes[i, j].set_xlim(left=-3, right=3)
+                # max(-3, p["norm_diaminobenzidine"].min())
+                axes[i, j].set(xlabel=None)
+        for ax, tissue in zip(axes[:, 0], tissues):
+            ax.set(ylabel=tissue)
+        for ax, donor in zip(axes[0, :], donors):
+            ax.set(title=donor)
+        fig.suptitle(marker)
+        fig.savefig(c.results_dir / f"morphology.histplot.{marker}.svg", **c.figkws)
+        plt.close(fig)
+
+    # # Filter out outliers?
+    # for par in vars_:
+    #     a = quant[par]
+    #     sel = (a > a.quantile(0.01)) & (a < a.quantile(0.99))
+    #     quant = quant.loc[sel]
+
     # Plot intensity values
     fig, axes = plt.subplots(2, 2, figsize=(4.2 * 2, 4 * 2))
-    markers = [
+    vars_ = [
         "hematoxilyn",
         "diaminobenzidine",
         "norm_hematoxilyn",
         "norm_diaminobenzidine",
     ]
     colors = ["blue", "orange", "blue", "orange"]
-    for ax, var, color in zip(axes.flat, markers, colors):
+    for ax, var, color in zip(axes.flat, vars_, colors):
         sns.histplot(quant[var], ax=ax, bins=200, rasterized=True, color=color)
     for ax in axes[1, :]:
         ax.axvline(thresh, linestyle="--", color="grey")
     fig.savefig(c.results_dir / "intensity_values.histplot.svg", **c.figkws)
+    plt.close(fig)
+
+    # Per marrker, tissue, donor
+    markers = annot["marker"].unique()
+    tissues = annot["tissue_name"].unique()
+    donors = annot["donor_id"].unique()
+    for marker in markers:
+        n, m = len(tissues), len(donors)
+        fig, axes = plt.subplots(n, m, figsize=(m * 2, n * 2), sharey=True)
+        for i, tissue in enumerate(tissues):
+            for j, donor in enumerate(donors):
+                p = quant.query(
+                    f"tissue_name == '{tissue}' & donor_id == '{donor}' & marker == '{marker}'"
+                )
+                if p.empty:
+                    axes[i, j].axis("off")
+                    continue
+                sns.histplot(
+                    p["norm_diaminobenzidine"],
+                    stat="density",
+                    ax=axes[i, j],
+                    bins=200,
+                    rasterized=True,
+                )
+                axes[i, j].axvline(thresh, linestyle="--", color="grey")
+                f = (p["norm_diaminobenzidine"] > 0).sum() / p.shape[0]
+                axes[i, j].text(2, 1, s=f"{f * 100:.1f}%", ha="right")
+                axes[i, j].set_xlim(left=-3, right=3)
+                # max(-3, p["norm_diaminobenzidine"].min())
+                axes[i, j].set(xlabel=None)
+        for ax, tissue in zip(axes[:, 0], tissues):
+            ax.set(ylabel=tissue)
+        for ax, donor in zip(axes[0, :], donors):
+            ax.set(title=donor)
+        fig.suptitle(marker)
+        fig.savefig(c.results_dir / f"intensity_values.histplot.{marker}.svg", **c.figkws)
+        plt.close(fig)
 
     # Threshold
     quant["pos"] = quant["norm_diaminobenzidine"] > thresh
@@ -134,14 +208,17 @@ def main() -> int:
     _stats = list()
     for marker, ax in zip(markers, axes.T):
         pp = p.query(f"marker == '{marker}'")
+        if pp.empty:
+            continue
         stats = swarmboxenplot(
             data=pp,
             x="tissue_name",
             y="percent_positive",
-            hue="patient_id",
+            hue="donor_id",
             test=True,
             swarm=True,
             ax=ax,
+            plot_kws=dict(palette="tab20"),
         )
         _stats.append(stats.assign(marker=marker))
         ax.set_title(marker)
@@ -153,15 +230,14 @@ def main() -> int:
     )
 
     # Compare only COVID/control
-    cats = {False: "Control", True: "COVID"}
-    p["disease"] = p["patient_id"].str.startswith("H").replace(cats)
-    p["disease"] = pd.Categorical(p["disease"], ordered=True, categories=cats.values())
     fig, axes = plt.subplots(
         1, len(markers), figsize=(len(markers) * 4, 1 * 4), sharey=True
     )
     _stats = list()
     for marker, ax in zip(markers, axes.T):
         pp = p.query(f"marker == '{marker}'")
+        if pp.empty:
+            continue
         stats = swarmboxenplot(
             data=pp,
             x="tissue_name",
@@ -173,64 +249,109 @@ def main() -> int:
         )
         _stats.append(stats.assign(marker=marker))
         ax.set_title(marker)
+    for ax in fig.axes:
+        ax.set_ylim((0, 70))
     stats = pd.concat(_stats)
     stats.to_csv(c.results_dir / "percent_positive.per_marker.per_disease.statistics.csv")
     fig.savefig(
         c.results_dir / "percent_positive.per_marker.per_disease.swarmboxenplot.svg",
         **c.figkws,
     )
+    plt.close(fig)
+
+    # Compare only COVID/control
+    fig, axes = plt.subplots(
+        1, len(markers), figsize=(len(markers) * 4, 1 * 4), sharey=True
+    )
+    _stats = list()
+    for marker, ax in zip(markers, axes.T):
+        pp = p.query(f"marker == '{marker}' & donor_id != 'C_1 pt 11267'")
+        if pp.empty:
+            continue
+        stats = swarmboxenplot(
+            data=pp,
+            x="tissue_name",
+            y="percent_positive",
+            hue="disease",
+            test=True,
+            swarm=True,
+            ax=ax,
+        )
+        _stats.append(stats.assign(marker=marker))
+        ax.set_title(marker)
+
+    for ax in fig.axes:
+        ax.set_ylim((0, 80))
+    stats = pd.concat(_stats)
+    stats.to_csv(
+        c.results_dir / "percent_positive.per_marker.per_disease.no_C1.statistics.csv"
+    )
+    fig.savefig(
+        c.results_dir
+        / "percent_positive.per_marker.per_disease.no_C1.swarmboxenplot.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
 
     # Visualize decomposition, segmentation and thresholding jointly
-    visualize(images, c.results_dir, quant)
+    visualize(images[:26], c.results_dir, quant=quant)
 
     return 0
 
+    # # Highlight some specific images
+    # c1 = "data/C_1 pt 11267/CD4/MB/CD4 1-20Xb.tiff"
+    # c4 = "data/C_4 pt 26799/CD4/MB/1-20Xb.tiff"
+    # ic1 = [i for i in images if i.fname == c1][0]
+    # ic4 = [i for i in images if i.fname == c4][0]
+    # visualize(
+    #     [ic1, ic4], c.results_dir, output_suffix=".C1_C4_comparison.MB.CD4", quant=quant
+    # )
 
-def _fix_file_structure():
+
+def _unpack_data(force: bool = True):
     """
-    Function to homogeneize file structures across cases.
-    Should only be run once.
+    Function to unpack data from zipfiles and homogeneize file structures across cases.
+    Should only be run once if starting from zipfiles downloaded from box.com.
     """
-    import os
     import shutil
+    import zipfile
 
-    # Clean slate
-    d = c.data_dir / r"H_1\ 7730"
-    os.system(f"rm -r {d}")
-    # Extract
-    f = c.data_dir / r"H_1\ 7730.zip"
-    os.system(f"unzip -d {d} {f}")
-    # remove 'extra' files
-    os.system(f"find {d} -name '.DS_Store' -delete")
-    os.system(f"find {d} -name '*.czi' -delete")
-    # remove unpaired files
-    os.system(f"find {d} -name 'CD 10-20Xd.tiff_metadata.xml' -delete")
-    os.system(f"find {d} -name 'CD3 7-10Xd.tiff_metadata.xml' -delete")
-    for marker in (c.data_dir / "H_1 7730").iterdir():
-        for tissue in sorted([f for f in marker.iterdir() if f.is_dir()]):
-            for file in tissue.iterdir():
-                end = ".tiff" + file.as_posix().split(".tiff")[1]
-                s = file.stem.replace(" d side", "_d_side").replace(" c  side", "_c_side")
-                p = s.split(" ")[1:]
-                n, mag = p if "-" not in p[0] else p[0].split("-")
-                mag = mag.split(".")[0]
-                new = tissue + f" {n} {marker.name}-{mag}{end}"
-                assert not new.exists()
-                file.replace(new)
-            shutil.rmtree(tissue)
+    for s in ["H_2 pt 14059", "C_4 pt 26799", "C_1 pt 11267"]:
+        # Clean slate
+        d = c.data_dir / s
+        if force:
+            shutil.rmtree(d)
+        # Extract
+        f = d + ".zip"
+        if not d.exists() or force:
+            with zipfile.ZipFile(f) as zf:
+                zf.extractall(d)
+        # remove 'extra' files
+        for f in d.glob("**/*.czi"):
+            f.unlink()
+        for f in d.glob("**/.DS_Store"):
+            f.unlink()
+
+        # fix duplicated folders
+        for marker in d.iterdir():
+            for tissue1 in marker.iterdir():
+                for tissue2 in tissue1.iterdir():
+                    if tissue2.name != tissue1.name:
+                        continue
+                    for file in tissue2.iterdir():
+                        file.replace(tissue1 / file.name)
+                    tissue2.rmdir()
 
 
 def get_files(
     input_dir: Path, exclude_patterns: tp.Sequence[str] = None
 ) -> tp.Tuple[tp.List[Image], pd.DataFrame]:
-    # from aicsimageio import AICSImage
-    # from aicsimageio.readers.czi_reader import CziReader
-    files = sorted(input_dir.glob("**/*.tiff"))
+    files = sorted(set(input_dir.glob("**/*.tiff")))
     if not files:
         raise FileNotFoundError("Could not find any TIFF files!")
     if exclude_patterns is not None:
         files = [
-            f for f in files for pat in exclude_patterns if not any([pat in f.as_posix()])
+            f for f in files if not any([pat in f.as_posix() for pat in exclude_patterns])
         ]
 
     abbrv = {
@@ -246,42 +367,21 @@ def get_files(
     images = list()
     _df = dict()
     for file in files:
-        img = Image(file.parent.name, file)
+        img = Image(file.parent.parent.name, file)
         img.fname = file.as_posix()
         images.append(img)
-        parts = (
-            file.stem.strip()
-            .replace("  ", " ")
-            .replace("MBS + IVS", "MBS_IVS")
-            .replace("MBS + IV", "MBS_IVS")
-            .split(" ")
-        )
-        if len(parts) == 2:
-            parts = (
-                file.stem.strip()
-                .replace("  ", " ")
-                .replace("MBS + IVS", "MBS_IVS")
-                .replace("MBS + IV", "MBS_IVS")
-                .replace("-", " -")
-                .split(" ")
-            )
-        parts = parts[:3]
-        _df[file.as_posix()] = parts + [file.parent.name, file.parent.parent.name]
-    df = pd.DataFrame(
-        _df, index=["tissue", "id", "magnification", "marker", "patient_id"]
-    ).T.rename_axis(index="image_file")
-    df["id"] = df["id"].str.replace(r"-.*", "", regex=True)
-    df["magnification"] = (
-        df["magnification"]
-        .str.replace(r".*-", "", regex=True)
-        .str.replace(r"X.*", "", regex=True)
-        .replace("m_d_side", "20")
-        .replace("m_c_side", "20")
-        + "X"
-    )
+        _df[file.as_posix()] = file.relative_to(c.data_dir).parts
+    df = pd.DataFrame(_df, index=["donor_id", "marker", "tissue", "file"]).T
+    assert len(images) == df.shape[0]
+    df["magnification"] = df["file"].str.extract(r"(\d\d?[X,x])")[0].str.replace("x", "X")
     assert df["tissue"].isin(abbrv.keys()).all()
     df["tissue_name"] = df["tissue"].replace(abbrv)
-    return images, df
+
+    cats = {False: "Control", True: "COVID"}
+    df["disease"] = df["donor_id"].str.startswith("H").replace(cats)
+    df["disease"] = pd.Categorical(df["disease"], ordered=True, categories=cats.values())
+
+    return images, df.rename_axis(index="image_file")
 
 
 def check_white_balance(images: tp.Sequence[Image]) -> tp.Dict[str, float]:
@@ -331,13 +431,16 @@ def resize_magnification(arr: Array, fraction: float) -> Array:
 
 
 def visualize(
-    images: tp.Sequence[Image], output_dir: Path, quant: pd.DataFrame = None
+    images: tp.Sequence[Image],
+    output_dir: Path,
+    output_suffix: str = "",
+    quant: pd.DataFrame = None,
 ) -> None:
     from matplotlib.backends.backend_pdf import PdfPages
     from imc.graphics import get_random_label_cmap
 
     n = 0 if quant is None else 3
-    suffix = "" if quant is None else ".intensity_positivity"
+    suffix = ("" if quant is None else ".intensity_positivity") + output_suffix
     pdf_f = output_dir.mkdir() / f"segmentation{suffix}.pdf"
     labels = [
         "IHC",
@@ -356,10 +459,13 @@ def visualize(
 
     with PdfPages(pdf_f) as pdf:
         for image in tqdm(images):
-            name = (
-                image.image_file_name.parent.parent.name
-                + " - "
-                + image.image_file_name.stem
+            name = " - ".join(
+                [
+                    image.image_file_name.parent.parent.parent.name,
+                    image.image_file_name.parent.parent.name,
+                    image.image_file_name.parent.name,
+                    image.image_file_name.stem,
+                ]
             )
             fig, axes = plt.subplots(
                 1,
@@ -385,19 +491,18 @@ def visualize(
 
             if quant is not None:
                 # Visualize intensity
-                f = c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())
-                cc = quant.loc[quant["file"] == f.as_posix()].copy()
+                # # raw
+                cc = quant.loc[quant["file"] == image.fname].copy()
                 mask = image.mask
                 intens = np.zeros(image.mask.shape, dtype=float)
                 for cell in sorted(np.unique(cc.index))[1:]:
                     intens[mask == cell] = cc.loc[cell, "diaminobenzidine"]
                 axes[5].imshow(intens, vmax=cc["diaminobenzidine"].max(), cmap="viridis")
 
-                # Normalize intensity
-                m, s = d[1].mean(), d[1].std()
+                # # normalized
                 intens = np.zeros(image.mask.shape, dtype=float)
                 for cell in sorted(np.unique(cc.index))[1:]:
-                    intens[mask == cell] = (cc.loc[cell, "diaminobenzidine"] - m) / s
+                    intens[mask == cell] = cc.loc[cell, "norm_diaminobenzidine"]
                 intens = np.ma.masked_array(intens, mask=intens == 0)
                 axes[6].imshow(intens, vmin=-1, vmax=1, cmap="RdBu_r")
 
@@ -427,6 +532,32 @@ def visualize(
             plt.figure(fig)
             pdf.savefig(**c.figkws)
             plt.close(fig)
+
+
+def quantify(
+    image, normalize_background: bool = True, normalize_illumination: bool = False
+) -> DataFrame:
+    image.normalize_illumination = normalize_illumination
+    f = (c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())).as_posix()
+    q = image.quantify(normalize=normalize_background)
+    return q.assign(file=f)
+
+
+# Serial:
+# _quant = list()
+# image = images[0]
+# for image in tqdm(images[images.index(image) :]):
+#     image.normalize_illumination = False
+#     f = (
+#         c.data_dir / image.image_file_name.relative_to(c.data_dir.absolute())
+#     ).as_posix()
+#     q = image.quantify()[["hematoxilyn", "diaminobenzidine"]]
+#     d = image.decompose_hdab(normalize=False)
+#     m0, s0 = d[0].mean(), d[0].std()
+#     m1, s1 = d[1].mean(), d[1].std()
+#     q["norm_hematoxilyn"] = (q["hematoxilyn"] - m0) / s0
+#     q["norm_diaminobenzidine"] = (q["diaminobenzidine"] - m1) / s1
+#     _quant.append(q.assign(file=f))
 
 
 if __name__ == "__main__" and "get_ipython" not in locals():
