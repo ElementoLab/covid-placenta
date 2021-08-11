@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 
 """
-Analysis description.
+Analysis of IHC data from COVID-19 infected placental tissue.
 """
 
 import sys
 import typing as tp
 
-from joblib import Parallel, delayed
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from csbdeep.utils import normalize
+import seaborn as sns
 import tifffile
 from tqdm import tqdm
-from seaborn_extensions import clustermap, swarmboxenplot
+from seaborn_extensions import swarmboxenplot
 from stardist.models import StarDist2D
 
 from src._config import Config as c
 from src.types import Path
-from src.ihclib import Image, Analysis
+from src.ihclib import Image
 
 Array = tp.Union[np.ndarray]
 
@@ -30,10 +29,8 @@ def main() -> int:
 
     # Check white balance is the same for all iamges
     wbos = pd.Series(check_white_balance(images))
-    # assert wbos.nunique() == 1
 
     # Segment
-    # model = StarDist2D.from_pretrained("2D_versatile_he")
     model = StarDist2D.from_pretrained("2D_versatile_fluo")
     model.thresholds = {"prob": 0.5, "nms": 0.3}
     for image in tqdm(images):
@@ -93,7 +90,9 @@ def main() -> int:
     quant = quant.reset_index().merge(annot, on="file")
     quant.to_csv(c.results_dir / "image_quantification.csv", index=False)
 
+    # Read in
     quant = pd.read_csv(c.results_dir / "image_quantification.csv", index_col=0)
+    thresh = 0
 
     # Plot intensity values
     fig, axes = plt.subplots(2, 2, figsize=(4.2 * 2, 4 * 2))
@@ -106,10 +105,12 @@ def main() -> int:
     colors = ["blue", "orange", "blue", "orange"]
     for ax, var, color in zip(axes.flat, markers, colors):
         sns.histplot(quant[var], ax=ax, bins=200, rasterized=True, color=color)
+    for ax in axes[1, :]:
+        ax.axvline(thresh, linestyle="--", color="grey")
     fig.savefig(c.results_dir / "intensity_values.histplot.svg", **c.figkws)
 
     # Threshold
-    quant["pos"] = quant["norm_diaminobenzidine"] > 0
+    quant["pos"] = quant["norm_diaminobenzidine"] > thresh
 
     # Percent positive per image
     total_count = quant.groupby(["file"])["pos"].count().to_frame("cells")
@@ -130,25 +131,53 @@ def main() -> int:
     fig, axes = plt.subplots(
         1, len(markers), figsize=(len(markers) * 4, 1 * 4), sharey=True
     )
-    # _stats = list()
+    _stats = list()
     for marker, ax in zip(markers, axes.T):
         pp = p.query(f"marker == '{marker}'")
-        # stats = swarmboxenplot(
-        swarmboxenplot(
+        stats = swarmboxenplot(
             data=pp,
             x="tissue_name",
             y="percent_positive",
             hue="patient_id",
-            test=False,
+            test=True,
             swarm=True,
             ax=ax,
         )
-        # _stats.append(stats.assign(marker=marker))
+        _stats.append(stats.assign(marker=marker))
         ax.set_title(marker)
-    # stats = pd.concat(_stats)
-    # stats.to_csv(c.results_dir / "percent_positive.per_marker.statistics.csv")
+    stats = pd.concat(_stats)
+    stats.to_csv(c.results_dir / "percent_positive.per_marker.per_patient.statistics.csv")
     fig.savefig(
-        c.results_dir / "percent_positive.per_marker.swarmboxenplot.svg", **c.figkws
+        c.results_dir / "percent_positive.per_marker.per_patient.swarmboxenplot.svg",
+        **c.figkws,
+    )
+
+    # Compare only COVID/control
+    cats = {False: "Control", True: "COVID"}
+    p["disease"] = p["patient_id"].str.startswith("H").replace(cats)
+    p["disease"] = pd.Categorical(p["disease"], ordered=True, categories=cats.values())
+    fig, axes = plt.subplots(
+        1, len(markers), figsize=(len(markers) * 4, 1 * 4), sharey=True
+    )
+    _stats = list()
+    for marker, ax in zip(markers, axes.T):
+        pp = p.query(f"marker == '{marker}'")
+        stats = swarmboxenplot(
+            data=pp,
+            x="tissue_name",
+            y="percent_positive",
+            hue="disease",
+            test=True,
+            swarm=True,
+            ax=ax,
+        )
+        _stats.append(stats.assign(marker=marker))
+        ax.set_title(marker)
+    stats = pd.concat(_stats)
+    stats.to_csv(c.results_dir / "percent_positive.per_marker.per_disease.statistics.csv")
+    fig.savefig(
+        c.results_dir / "percent_positive.per_marker.per_disease.swarmboxenplot.svg",
+        **c.figkws,
     )
 
     # Visualize decomposition, segmentation and thresholding jointly
@@ -196,7 +225,9 @@ def get_files(
 ) -> tp.Tuple[tp.List[Image], pd.DataFrame]:
     # from aicsimageio import AICSImage
     # from aicsimageio.readers.czi_reader import CziReader
-    files = sorted(list(input_dir.glob("**/*.tiff")))
+    files = sorted(input_dir.glob("**/*.tiff"))
+    if not files:
+        raise FileNotFoundError("Could not find any TIFF files!")
     if exclude_patterns is not None:
         files = [
             f for f in files for pat in exclude_patterns if not any([pat in f.as_posix()])
@@ -206,6 +237,7 @@ def get_files(
         "CP": "Chorionic Plate",
         "FV": "Fetal Villi",
         "IVS": "Intervillous space",
+        "MB": "Maternal Blood Space",
         "MBS": "Maternal Blood Space",
         "MBS_IVS": "Maternal Blood Space + Intervillous space",
         "MD": "Maternal Decidua",
@@ -247,6 +279,7 @@ def get_files(
         .replace("m_c_side", "20")
         + "X"
     )
+    assert df["tissue"].isin(abbrv.keys()).all()
     df["tissue_name"] = df["tissue"].replace(abbrv)
     return images, df
 
