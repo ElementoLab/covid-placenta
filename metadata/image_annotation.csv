@@ -1,4 +1,27 @@
 image_file,donor_id,marker,tissue,file,magnification,tissue_name,disease
+data/C_1 pt 11267/CD163/CP/1-20Xc.tiff,C_1 pt 11267,CD163,CP,1-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_1 pt 11267/CD163/CP/2-20Xc.tiff,C_1 pt 11267,CD163,CP,2-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_1 pt 11267/CD163/CP/3-20Xc.tiff,C_1 pt 11267,CD163,CP,3-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_1 pt 11267/CD163/CP/4-20Xc.tiff,C_1 pt 11267,CD163,CP,4-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_1 pt 11267/CD163/CP/5-20Xc.tiff,C_1 pt 11267,CD163,CP,5-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_1 pt 11267/CD163/CP/6-20Xc.tiff,C_1 pt 11267,CD163,CP,6-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_1 pt 11267/CD163/CP/7-20Xc.tiff,C_1 pt 11267,CD163,CP,7-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_1 pt 11267/CD163/FV/1-20Xf.tiff,C_1 pt 11267,CD163,FV,1-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/FV/2-20Xf.tiff,C_1 pt 11267,CD163,FV,2-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/FV/3-20Xf.tiff,C_1 pt 11267,CD163,FV,3-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/FV/4-20Xf.tiff,C_1 pt 11267,CD163,FV,4-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/FV/5-20Xf.tiff,C_1 pt 11267,CD163,FV,5-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/FV/6-20Xf.tiff,C_1 pt 11267,CD163,FV,6-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/FV/7-20Xf.tiff,C_1 pt 11267,CD163,FV,7-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/FV/8-20Xf.tiff,C_1 pt 11267,CD163,FV,8-20Xf.tiff,20X,Fetal Villi,Control
+data/C_1 pt 11267/CD163/MD/1-20Xd.tiff,C_1 pt 11267,CD163,MD,1-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_1 pt 11267/CD163/MD/2-20Xd.tiff,C_1 pt 11267,CD163,MD,2-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_1 pt 11267/CD163/MD/3-20Xd.tiff,C_1 pt 11267,CD163,MD,3-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_1 pt 11267/CD163/MD/4-20Xd.tiff,C_1 pt 11267,CD163,MD,4-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_1 pt 11267/CD163/MD/5-20Xd.tiff,C_1 pt 11267,CD163,MD,5-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_1 pt 11267/CD163/MD/6-20Xd.tiff,C_1 pt 11267,CD163,MD,6-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_1 pt 11267/CD163/MD/7-20Xd.tiff,C_1 pt 11267,CD163,MD,7-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_1 pt 11267/CD163/MD/8-20Xd.tiff,C_1 pt 11267,CD163,MD,8-20Xd.tiff,20X,Maternal Decidua,Control
 data/C_1 pt 11267/CD3/CP/CD3 1-20Xc.tiff,C_1 pt 11267,CD3,CP,CD3 1-20Xc.tiff,20X,Chorionic Plate,Control
 data/C_1 pt 11267/CD3/CP/CD3 10-20Xc.tiff,C_1 pt 11267,CD3,CP,CD3 10-20Xc.tiff,20X,Chorionic Plate,Control
 data/C_1 pt 11267/CD3/CP/CD3 11-20Xc.tiff,C_1 pt 11267,CD3,CP,CD3 11-20Xc.tiff,20X,Chorionic Plate,Control
@@ -466,6 +489,219 @@ data/C_4 pt 26799/CD56/MD/6-20Xd.tiff,C_4 pt 26799,CD56,MD,6-20Xd.tiff,20X,Mater
 data/C_4 pt 26799/CD56/MD/7-20Xd.tiff,C_4 pt 26799,CD56,MD,7-20Xd.tiff,20X,Maternal Decidua,Control
 data/C_4 pt 26799/CD56/MD/8-20Xd.tiff,C_4 pt 26799,CD56,MD,8-20Xd.tiff,20X,Maternal Decidua,Control
 data/C_4 pt 26799/CD56/MD/9-20Xd.tiff,C_4 pt 26799,CD56,MD,9-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD163/CP/1-20Xc.tiff,C_5 PT 8352,CD163,CP,1-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD163/CP/2-20Xc.tiff,C_5 PT 8352,CD163,CP,2-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD163/CP/3-20Xc.tiff,C_5 PT 8352,CD163,CP,3-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD163/CP/4-20Xc.tiff,C_5 PT 8352,CD163,CP,4-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD163/CP/5-20Xc.tiff,C_5 PT 8352,CD163,CP,5-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD163/FV/1-20Xf.tiff,C_5 PT 8352,CD163,FV,1-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD163/FV/2-20Xf.tiff,C_5 PT 8352,CD163,FV,2-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD163/FV/3-20Xf.tiff,C_5 PT 8352,CD163,FV,3-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD163/FV/4-20Xf.tiff,C_5 PT 8352,CD163,FV,4-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD163/FV/5-20Xf.tiff,C_5 PT 8352,CD163,FV,5-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD163/MD/1-20Xd.tiff,C_5 PT 8352,CD163,MD,1-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD163/MD/2-20Xd.tiff,C_5 PT 8352,CD163,MD,2-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD163/MD/3-20Xd.tiff,C_5 PT 8352,CD163,MD,3-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD163/MD/4-20Xd.tiff,C_5 PT 8352,CD163,MD,4-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD163/MD/5-20Xd.tiff,C_5 PT 8352,CD163,MD,5-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/CP/1-20Xc.tiff,C_5 PT 8352,CD3,CP,1-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/10-20Xc.tiff,C_5 PT 8352,CD3,CP,10-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/11-20Xc.tiff,C_5 PT 8352,CD3,CP,11-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/12-20Xc.tiff,C_5 PT 8352,CD3,CP,12-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/13-20Xc.tiff,C_5 PT 8352,CD3,CP,13-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/2-20Xc.tiff,C_5 PT 8352,CD3,CP,2-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/3-20Xc.tiff,C_5 PT 8352,CD3,CP,3-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/4-20Xc.tiff,C_5 PT 8352,CD3,CP,4-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/5-20Xc.tiff,C_5 PT 8352,CD3,CP,5-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/6-20Xc.tiff,C_5 PT 8352,CD3,CP,6-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/7-20Xc.tiff,C_5 PT 8352,CD3,CP,7-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/8-20Xc.tiff,C_5 PT 8352,CD3,CP,8-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/CP/9-20Xc.tiff,C_5 PT 8352,CD3,CP,9-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD3/FV/1-20Xf.tiff,C_5 PT 8352,CD3,FV,1-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/10-20Xf.tiff,C_5 PT 8352,CD3,FV,10-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/11-20Xf.tiff,C_5 PT 8352,CD3,FV,11-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/12-20Xf.tiff,C_5 PT 8352,CD3,FV,12-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/13-20Xf.tiff,C_5 PT 8352,CD3,FV,13-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/2-20Xf.tiff,C_5 PT 8352,CD3,FV,2-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/3-20Xf.tiff,C_5 PT 8352,CD3,FV,3-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/4-20Xf.tiff,C_5 PT 8352,CD3,FV,4-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/5-20Xf.tiff,C_5 PT 8352,CD3,FV,5-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/6-20Xf.tiff,C_5 PT 8352,CD3,FV,6-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/7-20Xf.tiff,C_5 PT 8352,CD3,FV,7-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/8-20Xf.tiff,C_5 PT 8352,CD3,FV,8-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/FV/9-20Xf.tiff,C_5 PT 8352,CD3,FV,9-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD3/MB/1-20Xb.tiff,C_5 PT 8352,CD3,MB,1-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/10-20Xb.tiff,C_5 PT 8352,CD3,MB,10-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/11-20Xb.tiff,C_5 PT 8352,CD3,MB,11-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/12-20Xb.tiff,C_5 PT 8352,CD3,MB,12-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/13-20Xb.tiff,C_5 PT 8352,CD3,MB,13-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/2-20Xb.tiff,C_5 PT 8352,CD3,MB,2-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/3-20Xb.tiff,C_5 PT 8352,CD3,MB,3-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/4-20Xb.tiff,C_5 PT 8352,CD3,MB,4-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/5-20Xb.tiff,C_5 PT 8352,CD3,MB,5-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/6-20Xb.tiff,C_5 PT 8352,CD3,MB,6-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/7-20Xb.tiff,C_5 PT 8352,CD3,MB,7-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/8-20Xb.tiff,C_5 PT 8352,CD3,MB,8-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MB/9-20Xb.tiff,C_5 PT 8352,CD3,MB,9-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD3/MD/1-20Xd.tiff,C_5 PT 8352,CD3,MD,1-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/10-20Xd.tiff,C_5 PT 8352,CD3,MD,10-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/11-20Xd.tiff,C_5 PT 8352,CD3,MD,11-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/12-20Xd.tiff,C_5 PT 8352,CD3,MD,12-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/2-20Xd.tiff,C_5 PT 8352,CD3,MD,2-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/3-20Xd.tiff,C_5 PT 8352,CD3,MD,3-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/4-20Xd.tiff,C_5 PT 8352,CD3,MD,4-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/5-20Xd.tiff,C_5 PT 8352,CD3,MD,5-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/6-20Xd.tiff,C_5 PT 8352,CD3,MD,6-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/7-20Xd.tiff,C_5 PT 8352,CD3,MD,7-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/8-20Xd.tiff,C_5 PT 8352,CD3,MD,8-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD3/MD/9-20Xd.tiff,C_5 PT 8352,CD3,MD,9-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/CP/1-20Xc.tiff,C_5 PT 8352,CD4,CP,1-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/10-20Xc.tiff,C_5 PT 8352,CD4,CP,10-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/11-20Xc.tiff,C_5 PT 8352,CD4,CP,11-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/12-20Xc.tiff,C_5 PT 8352,CD4,CP,12-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/13-20Xc.tiff,C_5 PT 8352,CD4,CP,13-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/2-20Xc.tiff,C_5 PT 8352,CD4,CP,2-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/3-20Xc.tiff,C_5 PT 8352,CD4,CP,3-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/4-20Xc.tiff,C_5 PT 8352,CD4,CP,4-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/5-20Xc.tiff,C_5 PT 8352,CD4,CP,5-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/6-20Xc.tiff,C_5 PT 8352,CD4,CP,6-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/7-20Xc.tiff,C_5 PT 8352,CD4,CP,7-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/8-20Xc.tiff,C_5 PT 8352,CD4,CP,8-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/CP/9-20Xc.tiff,C_5 PT 8352,CD4,CP,9-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD4/FV/1-20Xf.tiff,C_5 PT 8352,CD4,FV,1-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/10-20Xf.tiff,C_5 PT 8352,CD4,FV,10-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/11-20Xf.tiff,C_5 PT 8352,CD4,FV,11-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/12-20Xf.tiff,C_5 PT 8352,CD4,FV,12-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/13-20Xf.tiff,C_5 PT 8352,CD4,FV,13-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/2-20Xf.tiff,C_5 PT 8352,CD4,FV,2-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/3-20Xf.tiff,C_5 PT 8352,CD4,FV,3-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/4-20Xf.tiff,C_5 PT 8352,CD4,FV,4-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/5-20Xf.tiff,C_5 PT 8352,CD4,FV,5-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/6-20Xf.tiff,C_5 PT 8352,CD4,FV,6-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/7-20Xf.tiff,C_5 PT 8352,CD4,FV,7-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/8-20Xf.tiff,C_5 PT 8352,CD4,FV,8-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/FV/9-20Xf.tiff,C_5 PT 8352,CD4,FV,9-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD4/MB/1-20Xb.tiff,C_5 PT 8352,CD4,MB,1-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/10-20Xb.tiff,C_5 PT 8352,CD4,MB,10-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/11-20Xb.tiff,C_5 PT 8352,CD4,MB,11-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/12-20Xb.tiff,C_5 PT 8352,CD4,MB,12-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/13-20Xb.tiff,C_5 PT 8352,CD4,MB,13-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/14-20Xb.tiff,C_5 PT 8352,CD4,MB,14-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/15-20Xb.tiff,C_5 PT 8352,CD4,MB,15-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/2-20Xb.tiff,C_5 PT 8352,CD4,MB,2-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/3-20Xb.tiff,C_5 PT 8352,CD4,MB,3-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/4-20Xb.tiff,C_5 PT 8352,CD4,MB,4-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/5-20Xb.tiff,C_5 PT 8352,CD4,MB,5-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/6-20Xb.tiff,C_5 PT 8352,CD4,MB,6-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/7-20Xb.tiff,C_5 PT 8352,CD4,MB,7-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/8-20Xb.tiff,C_5 PT 8352,CD4,MB,8-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MB/9-20Xb.tiff,C_5 PT 8352,CD4,MB,9-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD4/MD/1-20Xd.tiff,C_5 PT 8352,CD4,MD,1-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/10-20Xd.tiff,C_5 PT 8352,CD4,MD,10-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/11-20Xd.tiff,C_5 PT 8352,CD4,MD,11-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/12-20Xd.tiff,C_5 PT 8352,CD4,MD,12-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/13-20Xd.tiff,C_5 PT 8352,CD4,MD,13-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/14-20Xd.tiff,C_5 PT 8352,CD4,MD,14-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/15-20Xd.tiff,C_5 PT 8352,CD4,MD,15-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/2-20Xd.tiff,C_5 PT 8352,CD4,MD,2-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/3-20Xd.tiff,C_5 PT 8352,CD4,MD,3-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/4-20Xd.tiff,C_5 PT 8352,CD4,MD,4-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/5-20Xd.tiff,C_5 PT 8352,CD4,MD,5-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/6-20Xd.tiff,C_5 PT 8352,CD4,MD,6-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/7-20Xd.tiff,C_5 PT 8352,CD4,MD,7-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/8-20Xd.tiff,C_5 PT 8352,CD4,MD,8-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD4/MD/9-20Xd.tiff,C_5 PT 8352,CD4,MD,9-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/CP/1-20Xc.tiff,C_5 PT 8352,CD56,CP,1-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/10-20Xc.tiff,C_5 PT 8352,CD56,CP,10-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/11-20Xc.tiff,C_5 PT 8352,CD56,CP,11-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/12-20Xc.tiff,C_5 PT 8352,CD56,CP,12-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/13-20Xc.tiff,C_5 PT 8352,CD56,CP,13-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/2-20Xc.tiff,C_5 PT 8352,CD56,CP,2-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/3-20Xc.tiff,C_5 PT 8352,CD56,CP,3-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/4-20Xc.tiff,C_5 PT 8352,CD56,CP,4-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/5-20Xc.tiff,C_5 PT 8352,CD56,CP,5-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/6-20Xc.tiff,C_5 PT 8352,CD56,CP,6-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/7-20Xc.tiff,C_5 PT 8352,CD56,CP,7-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/8-20Xc.tiff,C_5 PT 8352,CD56,CP,8-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/CP/9-20Xc.tiff,C_5 PT 8352,CD56,CP,9-20Xc.tiff,20X,Chorionic Plate,Control
+data/C_5 PT 8352/CD56/FV/1-20Xf.tiff,C_5 PT 8352,CD56,FV,1-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/10-20Xf.tiff,C_5 PT 8352,CD56,FV,10-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/11-20Xf.tiff,C_5 PT 8352,CD56,FV,11-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/12-20Xf.tiff,C_5 PT 8352,CD56,FV,12-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/13-20Xf.tiff,C_5 PT 8352,CD56,FV,13-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/2-20Xf.tiff,C_5 PT 8352,CD56,FV,2-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/3-20Xf.tiff,C_5 PT 8352,CD56,FV,3-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/4-20Xf.tiff,C_5 PT 8352,CD56,FV,4-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/5-20Xf.tiff,C_5 PT 8352,CD56,FV,5-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/6-20Xf.tiff,C_5 PT 8352,CD56,FV,6-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/7-20Xf.tiff,C_5 PT 8352,CD56,FV,7-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/8-20Xf.tiff,C_5 PT 8352,CD56,FV,8-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/FV/9-20Xf.tiff,C_5 PT 8352,CD56,FV,9-20Xf.tiff,20X,Fetal Villi,Control
+data/C_5 PT 8352/CD56/MB/1-20Xb.tiff,C_5 PT 8352,CD56,MB,1-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/10-20Xb.tiff,C_5 PT 8352,CD56,MB,10-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/11-20Xb.tiff,C_5 PT 8352,CD56,MB,11-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/12-20Xb.tiff,C_5 PT 8352,CD56,MB,12-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/13-20Xb.tiff,C_5 PT 8352,CD56,MB,13-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/2-20Xb.tiff,C_5 PT 8352,CD56,MB,2-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/3-20Xb.tiff,C_5 PT 8352,CD56,MB,3-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/4-20Xb.tiff,C_5 PT 8352,CD56,MB,4-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/5-20Xb.tiff,C_5 PT 8352,CD56,MB,5-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/6-20Xb.tiff,C_5 PT 8352,CD56,MB,6-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/7-20Xb.tiff,C_5 PT 8352,CD56,MB,7-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/8-20Xb.tiff,C_5 PT 8352,CD56,MB,8-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MB/9-20Xb.tiff,C_5 PT 8352,CD56,MB,9-20Xb.tiff,20X,Maternal Blood Space,Control
+data/C_5 PT 8352/CD56/MD/1-20Xd.tiff,C_5 PT 8352,CD56,MD,1-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/10-20Xd.tiff,C_5 PT 8352,CD56,MD,10-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/11-20Xd.tiff,C_5 PT 8352,CD56,MD,11-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/12-20Xd.tiff,C_5 PT 8352,CD56,MD,12-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/13-20Xd.tiff,C_5 PT 8352,CD56,MD,13-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/2-20Xd.tiff,C_5 PT 8352,CD56,MD,2-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/3-20Xd.tiff,C_5 PT 8352,CD56,MD,3-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/4-20Xd.tiff,C_5 PT 8352,CD56,MD,4-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/5-20Xd.tiff,C_5 PT 8352,CD56,MD,5-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/6-20Xd.tiff,C_5 PT 8352,CD56,MD,6-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/7-20Xd.tiff,C_5 PT 8352,CD56,MD,7-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/8-20Xd.tiff,C_5 PT 8352,CD56,MD,8-20Xd.tiff,20X,Maternal Decidua,Control
+data/C_5 PT 8352/CD56/MD/9-20Xd.tiff,C_5 PT 8352,CD56,MD,9-20Xd.tiff,20X,Maternal Decidua,Control
+data/H_1 7730/CD163/CP/1-20Xc.tiff,H_1 7730,CD163,CP,1-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/10-20Xc.tiff,H_1 7730,CD163,CP,10-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/11-20Xc.tiff,H_1 7730,CD163,CP,11-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/12-20Xc.tiff,H_1 7730,CD163,CP,12-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/2-20Xc.tiff,H_1 7730,CD163,CP,2-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/3-20Xc.tiff,H_1 7730,CD163,CP,3-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/4-20Xc.tiff,H_1 7730,CD163,CP,4-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/5-20Xc.tiff,H_1 7730,CD163,CP,5-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/6-20Xc.tiff,H_1 7730,CD163,CP,6-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/CP/7-20Xc.tiff,H_1 7730,CD163,CP,7-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_1 7730/CD163/FV/1-20Xf.tiff,H_1 7730,CD163,FV,1-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/10-20Xf.tiff,H_1 7730,CD163,FV,10-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/11-20Xf.tiff,H_1 7730,CD163,FV,11-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/12-20Xf.tiff,H_1 7730,CD163,FV,12-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/2-20Xf.tiff,H_1 7730,CD163,FV,2-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/3-20Xf.tiff,H_1 7730,CD163,FV,3-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/4-20Xf.tiff,H_1 7730,CD163,FV,4-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/5-20Xf.tiff,H_1 7730,CD163,FV,5-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/6-20Xf.tiff,H_1 7730,CD163,FV,6-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/FV/7-20Xf.tiff,H_1 7730,CD163,FV,7-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_1 7730/CD163/MB/1-20Xb.tiff,H_1 7730,CD163,MB,1-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/10-20Xb.tiff,H_1 7730,CD163,MB,10-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/11-20Xb.tiff,H_1 7730,CD163,MB,11-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/12-20Xb.tiff,H_1 7730,CD163,MB,12-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/13-20Xb.tiff,H_1 7730,CD163,MB,13-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/2-20Xb.tiff,H_1 7730,CD163,MB,2-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/3-20Xb.tiff,H_1 7730,CD163,MB,3-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/4-20Xb.tiff,H_1 7730,CD163,MB,4-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/5-20Xb.tiff,H_1 7730,CD163,MB,5-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MB/6-20Xb.tiff,H_1 7730,CD163,MB,6-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_1 7730/CD163/MD/1-20Xd.tiff,H_1 7730,CD163,MD,1-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/2-20Xd.tiff,H_1 7730,CD163,MD,2-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/3-20Xd.tiff,H_1 7730,CD163,MD,3-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/4-20Xd.tiff,H_1 7730,CD163,MD,4-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/5-20Xd.tiff,H_1 7730,CD163,MD,5-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/6-20Xd.tiff,H_1 7730,CD163,MD,6-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/7-20Xd.tiff,H_1 7730,CD163,MD,7-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/8-20Xd.tiff,H_1 7730,CD163,MD,8-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_1 7730/CD163/MD/9-20Xd.tiff,H_1 7730,CD163,MD,9-20Xd.tiff,20X,Maternal Decidua,COVID
 data/H_1 7730/CD3/CP/CD3 1-20Xc.tiff,H_1 7730,CD3,CP,CD3 1-20Xc.tiff,20X,Chorionic Plate,COVID
 data/H_1 7730/CD3/CP/CD3 10-20Xc.tiff,H_1 7730,CD3,CP,CD3 10-20Xc.tiff,20X,Chorionic Plate,COVID
 data/H_1 7730/CD3/CP/CD3 11-20Xc.tiff,H_1 7730,CD3,CP,CD3 11-20Xc.tiff,20X,Chorionic Plate,COVID
@@ -738,6 +974,76 @@ data/H_1 7730/CD56/MD/CD56 6-20Xd.tiff,H_1 7730,CD56,MD,CD56 6-20Xd.tiff,20X,Mat
 data/H_1 7730/CD56/MD/CD56 7-20Xd.tiff,H_1 7730,CD56,MD,CD56 7-20Xd.tiff,20X,Maternal Decidua,COVID
 data/H_1 7730/CD56/MD/CD56 8-20Xd.tiff,H_1 7730,CD56,MD,CD56 8-20Xd.tiff,20X,Maternal Decidua,COVID
 data/H_1 7730/CD56/MD/CD56 9-20Xd.tiff,H_1 7730,CD56,MD,CD56 9-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/CP/1-20Xc.tiff,H_2 pt 14059,CD163,CP,1-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/10-20Xc.tiff,H_2 pt 14059,CD163,CP,10-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/11-20Xc.tiff,H_2 pt 14059,CD163,CP,11-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/12-20Xc.tiff,H_2 pt 14059,CD163,CP,12-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/13-20Xc.tiff,H_2 pt 14059,CD163,CP,13-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/14-20Xc.tiff,H_2 pt 14059,CD163,CP,14-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/15-20Xc.tiff,H_2 pt 14059,CD163,CP,15-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/16-20Xc.tiff,H_2 pt 14059,CD163,CP,16-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/2-20Xc.tiff,H_2 pt 14059,CD163,CP,2-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/3-20Xc.tiff,H_2 pt 14059,CD163,CP,3-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/4-20Xc.tiff,H_2 pt 14059,CD163,CP,4-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/5-20Xc.tiff,H_2 pt 14059,CD163,CP,5-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/6-20Xc.tiff,H_2 pt 14059,CD163,CP,6-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/7-20Xc.tiff,H_2 pt 14059,CD163,CP,7-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/8-20Xc.tiff,H_2 pt 14059,CD163,CP,8-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/CP/9-20Xc.tiff,H_2 pt 14059,CD163,CP,9-20Xc.tiff,20X,Chorionic Plate,COVID
+data/H_2 pt 14059/CD163/FV/1-20Xf.tiff,H_2 pt 14059,CD163,FV,1-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/10-20Xf.tiff,H_2 pt 14059,CD163,FV,10-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/11-20Xf.tiff,H_2 pt 14059,CD163,FV,11-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/12-20Xf.tiff,H_2 pt 14059,CD163,FV,12-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/13-20Xf.tiff,H_2 pt 14059,CD163,FV,13-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/14-20Xf.tiff,H_2 pt 14059,CD163,FV,14-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/15-20Xf.tiff,H_2 pt 14059,CD163,FV,15-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/16-20Xf.tiff,H_2 pt 14059,CD163,FV,16-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/17-20Xf.tiff,H_2 pt 14059,CD163,FV,17-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/18-20Xf.tiff,H_2 pt 14059,CD163,FV,18-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/19-20Xf.tiff,H_2 pt 14059,CD163,FV,19-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/2-20Xf.tiff,H_2 pt 14059,CD163,FV,2-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/3-20Xf.tiff,H_2 pt 14059,CD163,FV,3-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/4-20Xf.tiff,H_2 pt 14059,CD163,FV,4-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/5-20Xf.tiff,H_2 pt 14059,CD163,FV,5-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/6-20Xf.tiff,H_2 pt 14059,CD163,FV,6-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/7-20Xf.tiff,H_2 pt 14059,CD163,FV,7-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/8-20Xf.tiff,H_2 pt 14059,CD163,FV,8-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/FV/9-20Xf.tiff,H_2 pt 14059,CD163,FV,9-20Xf.tiff,20X,Fetal Villi,COVID
+data/H_2 pt 14059/CD163/MB/1-20Xb.tiff,H_2 pt 14059,CD163,MB,1-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/10-20Xb.tiff,H_2 pt 14059,CD163,MB,10-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/11-20Xb.tiff,H_2 pt 14059,CD163,MB,11-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/12-20Xb.tiff,H_2 pt 14059,CD163,MB,12-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/13-20Xb.tiff,H_2 pt 14059,CD163,MB,13-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/14-20Xb.tiff,H_2 pt 14059,CD163,MB,14-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/15-20Xb.tiff,H_2 pt 14059,CD163,MB,15-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/16-20Xb.tiff,H_2 pt 14059,CD163,MB,16-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/2-20Xb.tiff,H_2 pt 14059,CD163,MB,2-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/3-20Xb.tiff,H_2 pt 14059,CD163,MB,3-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/4-20Xb.tiff,H_2 pt 14059,CD163,MB,4-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/5-20Xb.tiff,H_2 pt 14059,CD163,MB,5-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/6-20Xb.tiff,H_2 pt 14059,CD163,MB,6-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/7-20Xb.tiff,H_2 pt 14059,CD163,MB,7-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/8-20Xb.tiff,H_2 pt 14059,CD163,MB,8-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MB/9-20Xb.tiff,H_2 pt 14059,CD163,MB,9-20Xb.tiff,20X,Maternal Blood Space,COVID
+data/H_2 pt 14059/CD163/MD/1-20Xd.tiff,H_2 pt 14059,CD163,MD,1-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/10-20Xd.tiff,H_2 pt 14059,CD163,MD,10-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/11-20Xd.tiff,H_2 pt 14059,CD163,MD,11-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/12-20Xd.tiff,H_2 pt 14059,CD163,MD,12-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/13-20Xd.tiff,H_2 pt 14059,CD163,MD,13-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/14-20Xd.tiff,H_2 pt 14059,CD163,MD,14-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/15-20Xd.tiff,H_2 pt 14059,CD163,MD,15-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/16-20Xd.tiff,H_2 pt 14059,CD163,MD,16-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/17-20Xd.tiff,H_2 pt 14059,CD163,MD,17-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/18-20Xd.tiff,H_2 pt 14059,CD163,MD,18-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/19-20Xd.tiff,H_2 pt 14059,CD163,MD,19-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/2-20Xd.tiff,H_2 pt 14059,CD163,MD,2-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/3-20Xd.tiff,H_2 pt 14059,CD163,MD,3-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/4-20Xd.tiff,H_2 pt 14059,CD163,MD,4-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/5-20Xd.tiff,H_2 pt 14059,CD163,MD,5-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/6-20Xd.tiff,H_2 pt 14059,CD163,MD,6-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/7-20Xd.tiff,H_2 pt 14059,CD163,MD,7-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/8-20Xd.tiff,H_2 pt 14059,CD163,MD,8-20Xd.tiff,20X,Maternal Decidua,COVID
+data/H_2 pt 14059/CD163/MD/9-20Xd.tiff,H_2 pt 14059,CD163,MD,9-20Xd.tiff,20X,Maternal Decidua,COVID
 data/H_2 pt 14059/CD3/CP/1-20Xc.tiff,H_2 pt 14059,CD3,CP,1-20Xc.tiff,20X,Chorionic Plate,COVID
 data/H_2 pt 14059/CD3/CP/10-20Xc.tiff,H_2 pt 14059,CD3,CP,10-20Xc.tiff,20X,Chorionic Plate,COVID
 data/H_2 pt 14059/CD3/CP/11-20Xc.tiff,H_2 pt 14059,CD3,CP,11-20Xc.tiff,20X,Chorionic Plate,COVID

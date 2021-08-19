@@ -120,7 +120,7 @@ class Image:
         image_url: str = None,
         mask_file_name: Path = None,
         mask_url: str = None,
-        normalize_illumination: bool = True,
+        normalize_illumination: bool = False,
     ):
         self.marker = marker
         self.image_file_name = image_file_name.absolute()
@@ -230,15 +230,17 @@ class Image:
         # dab = minmax_scale(dab2)
         # return np.stack([dab, hema])
 
-    def quantify(self, morphology: bool = True, normalize: bool = True, **kwargs):
-        d = self.decompose_hdab(**kwargs)
-        q = quantify_cell_intensity(d, self.mask, border_objs=True)
+    def quantify(
+        self, morphology: bool = True, normalize_background: bool = True, **kwargs
+    ):
+        hd = self.decompose_hdab(**kwargs)
+        q = quantify_cell_intensity(hd, self.mask, border_objs=True)
         q.columns = ["hematoxilyn", "diaminobenzidine"]
         q.index.name = "cell_id"
 
-        if normalize:
-            m0, s0 = d[0].mean(), d[0].std()
-            m1, s1 = d[1].mean(), d[1].std()
+        if normalize_background:
+            m0, s0 = hd[0].mean(), hd[0].std()
+            m1, s1 = hd[1].mean(), hd[1].std()
             q["norm_hematoxilyn"] = (q["hematoxilyn"] - m0) / s0
             q["norm_diaminobenzidine"] = (q["diaminobenzidine"] - m1) / s1
 
@@ -246,6 +248,9 @@ class Image:
             m = quantify_cell_morphology(self.mask, border_objs=True)
             q = q.join(m)
         return q.assign(image=self.name, marker=self.marker)
+
+        # fig, ax = plt.subplots()
+        # ax.scatter(q["norm_diaminobenzidine"], q["norm_hematoxilyn"])
 
 
 class ImageCollection:
