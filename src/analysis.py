@@ -24,8 +24,8 @@ from src.ihclib import Image, downcast_int
 
 def main() -> int:
     images, annot = get_files(
-        input_dir=c.data_dir, exclude_patterns=["_old", "mask"]
-    )  # "CD163", "C_1"
+        input_dir=c.data_dir, exclude_patterns=["_old", "mask", "C_1", "CD163"]
+    )
     annot.to_csv(c.metadata_dir / "image_annotation.csv")
 
     # Dataset structure
@@ -38,7 +38,7 @@ def main() -> int:
     segment(images, annot, overwrite=True)
 
     # Visualize decompositin and segmentation
-    s = annot.query("marker != 'CD163' & donor_id != 'C_1 pt 11267'")
+    s = annot
     cols = ["marker", "tissue_name", "donor_id"]
     sf = s.groupby(cols).sample(n=1).sort_values(cols).index
     si = [i for i in images if i.fname in sf]
@@ -57,7 +57,6 @@ def main() -> int:
 
     # Read in
     quant = pd.read_csv(c.results_dir / "image_quantification.csv", index_col=0)
-    quant = quant.query("marker != 'CD163' & donor_id != 'C_1 pt 11267'")
     thresh = 0
 
     # Plot morphology
@@ -305,23 +304,34 @@ def main() -> int:
     to_demo += q["CD3 - Fetal Villi"].nsmallest(5).index.tolist()
     to_demo += q["CD3 - Maternal Blood Space"].nlargest(5).index.tolist()
     to_demo += q["CD3 - Maternal Blood Space"].nsmallest(5).index.tolist()
+    si = [i for i in images if i.fname in to_demo]
+    visualize(
+        si,
+        c.results_dir,
+        quant=quant,
+        output_suffix=".representative_differential.top_bottom",
+    )
 
-    # # Select randomly two images per class to contrast
-    # for tissue in ["Fetal Villi", "Maternal Blood Space"]:
-    #     for dis in ["Control", "COVID"]:
-    #         sel = (
-    #             annot.query(
-    #                 f"tissue_name == '{tissue}' and disease == '{dis}'",
-    #                 engine="python",
-    #             )
-    #             .sample(n=2)
-    #             .index
-    #         )
-    #         to_demo += sel.tolist()
+    # Select randomly two images per class to contrast
+    to_demo = list()
+    for tissue in ["Fetal Villi", "Maternal Blood Space"]:
+        for dis in ["Control", "COVID"]:
+            sel = (
+                annot.query(
+                    f"tissue_name == '{tissue}' and disease == '{dis}'",
+                    engine="python",
+                )
+                .sample(n=5)
+                .index
+            )
+            to_demo += sel.tolist()
 
     si = [i for i in images if i.fname in to_demo]
     visualize(
-        si, c.results_dir, quant=quant, output_suffix=".representative_differential2"
+        si,
+        c.results_dir,
+        quant=quant,
+        output_suffix=".representative_differential.random",
     )
 
     return 0
@@ -409,10 +419,13 @@ def check_dataset_structure(annot: DataFrame) -> None:
         .nunique()
         .rename("image_number")
     )
-    g.to_csv(c.results_dir / "image_summary.csv")
+    g.to_csv(c.results_dir / "image_summary.per_donor.csv")
     g.mean()  # 18.02777
     g.median()  # 19.0
     g.quantile([0.05, 0.95])  # 6.1, 32.7
+
+    g = annot.groupby(["disease", "marker", "tissue_name"])["file"].nunique()
+    g.to_csv(c.results_dir / "image_summary.per_disease.csv")
 
 
 def check_white_balance(images: tp.Sequence[Image]) -> tp.Dict[str, float]:
