@@ -13,21 +13,21 @@ import matplotlib
 from matplotlib.figure import Figure as _Figure
 import numpy
 import pandas
-import skimage
-import skimage.future
-import networkx
+
 
 __all__ = [
+    "Path",
     "Shape",
-    "Shape2D",
-    "Shape3D",
-    "Shape4D",
+    # "Shape2D",
+    # "Shape3D",
+    # "Shape4D",
     "Array",
-    "Graph",
+    # "Graph",
+    # "Series",
+    # "MultiIndexSeries",
     "DataFrame",
     "Figure",
     "Axis",
-    "Path",
 ]
 
 
@@ -86,17 +86,19 @@ class Path(pathlib.Path):
                 Path,
                 glob(self.as_posix() + sep + pattern, recursive=True),
             )
-        yield from super().glob(pattern)
+        else:
+            yield from super().glob(pattern)
 
 
 Shape = tp.Tuple[int, ...]
-Shape2D = tp.Tuple[int, int]
-Shape3D = tp.Tuple[int, int, int]
-Shape4D = tp.Tuple[int, int, int, int]
+# Shape2D = tp.Tuple[int, int]
+# Shape3D = tp.Tuple[int, int, int]
+# Shape4D = tp.Tuple[int, int, int, int]
 
 Array = tp.Union[numpy.ndarray]
-Graph = tp.Union[networkx.Graph, skimage.future.graph.RAG]
+# Graph = tp.Union[networkx.Graph, skimage.future.graph.RAG]
 
+# Series = tp.Union[pandas.Series]
 # MultiIndexSeries = tp.Union[pandas.Series]
 DataFrame = tp.Union[pandas.DataFrame]
 

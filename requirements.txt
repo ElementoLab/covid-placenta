@@ -1,0 +1,11 @@
+parmap
+tqdm
+pandas
+numpy
+matplotlib
+seaborn
+tifffile==2020.6.3
+scikit-image>=0.18.1,<1.0.0
+pingouin
+scanpy
+seaborn_extensions>=0.0.4
