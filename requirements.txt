@@ -9,3 +9,4 @@ scikit-image>=0.18.1,<1.0.0
 pingouin
 scanpy
 seaborn_extensions>=0.0.4
+stardist

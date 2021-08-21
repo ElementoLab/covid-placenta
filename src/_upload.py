@@ -73,13 +73,18 @@ def main():
     bucket_url = dep["links"]["bucket"] + "/"
     # 'https://zenodo.org/api/files/67ad5ccf-277e-4a55-9413-20b46d76ba02/'
 
-    # # Upload MCD files
+    # # Upload TIFF files
     for file, target in zip(annot.index, annot.index.str.replace("data/", "")):
         upload(file, target)
 
-    # # Upload Masks
-
-    # Upload h5ad
+    # Upload Metadata
+    dep = get()
+    df = pd.DataFrame(dep["files"])
+    df["filename"] = "data/" + df["filename"]
+    df["download_link"] = df["links"].apply(lambda x: x["download"])
+    meta = annot.join(df.set_index("filename")[["download_link", "checksum"]])
+    meta.to_csv("metadata/zenodo_metadata.csv")
+    upload("metadata/zenodo_metadata.csv", "metadata.csv")
 
 
 def get() -> tp.Dict[str, tp.Any]:

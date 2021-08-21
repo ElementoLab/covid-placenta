@@ -23,3 +23,9 @@ class Config:
     data_dir: tp.Final[Path] = Path("data")
     processed_dir: tp.Final[Path] = Path("processed")
     results_dir: tp.Final[Path] = Path("results")
+    tissues = [
+        "Maternal Decidua",
+        "Maternal Blood Space",
+        "Fetal Villi",
+        "Chorionic Plate",
+    ]

@@ -9,11 +9,13 @@ import typing as tp
 
 import numpy as np
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import tifffile
 from tqdm import tqdm
 from seaborn_extensions import swarmboxenplot
+import pingouin as pg
 from stardist.models import StarDist2D
 import parmap
 
@@ -31,16 +33,12 @@ def main() -> int:
     # Dataset structure
     check_dataset_structure(annot)
 
-    # # Check white balance is the same for all iamges
-    # wbos = pd.Series(check_white_balance(images))
-
     # Segment
     segment(images, annot, overwrite=True)
 
-    # Visualize decompositin and segmentation
-    s = annot
+    # Visualize decompositin and segmentation # # one random image per group
     cols = ["marker", "tissue_name", "donor_id"]
-    sf = s.groupby(cols).sample(n=1).sort_values(cols).index
+    sf = annot.groupby(cols).sample(n=1).sort_values(cols).index
     si = [i for i in images if i.fname in sf]
     visualize(si, output_dir=c.results_dir, output_suffix=".representative")
 
@@ -72,18 +70,6 @@ def main() -> int:
     fig.savefig(c.results_dir / "morphology.histplot.svg", **c.figkws)
     plt.close(fig)
 
-    # f = "data/C_1 pt 11267/CD3/FV/CD3 8-20Xf.tiff"
-    # f = 'data/C_1 pt 11267/CD3/CP/CD3 14-20Xc.tiff'
-    # image = [i for i in images if i.fname == f][0]
-    # df = quant.loc[quant["file"] == f]
-    # plt.scatter(df["norm_diaminobenzidine"], df["norm_hematoxilyn"])
-
-    # # Filter out outliers?
-    # for par in vars_:
-    #     a = quant[par]
-    #     sel = (a > a.quantile(0.01)) & (a < a.quantile(0.99))
-    #     quant = quant.loc[sel]
-
     # Plot intensity values
     fig, axes = plt.subplots(2, 2, figsize=(4.2 * 2, 4 * 2))
     vars_ = [
@@ -107,114 +93,30 @@ def main() -> int:
     fig.savefig(c.results_dir / "intensity_values.histplot.svg", **c.figkws)
     plt.close(fig)
 
-    # # Inspect raw intensity per image
-    # quant.groupby("image").mean()
-    # from imc.graphics import get_grid_dims
-
-    # fig = get_grid_dims(len(set(quant["image"])), return_fig=True)
-    # for image, ax in zip(images, fig.axes):
-    #     q = quant.query(f"file == '{image.fname}'")
-    #     ax.scatter(q["norm_diaminobenzidine"], q["norm_hematoxilyn"], s=5, alpha=0.8)
-    #     ax.set(title=image.fname)
-    # fig.tight_layout()
-
-    # # Filter out non-cells
-    # image = images[0]
-    # q = quant.query(f"file == '{image.fname}'")
-    # mask1 = image.mask.copy()
-    # mask1[np.isin(mask1, q.index[q["norm_hematoxilyn"] < 0])] = 0
-    # mask2 = image.mask.copy()
-    # mask2[np.isin(mask2, q.index[q["norm_hematoxilyn"] < 0.5])] = 0
-    # mask3 = image.mask.copy()
-    # mask3[np.isin(mask3, q.index[q["norm_hematoxilyn"] < 1.0])] = 0
-
-    # fig, axes = plt.subplots(3, 2, sharex=True, sharey=True)
-    # axes[0][0].imshow(image.image)
-    # axes[0][1].imshow(image.mask)
-    # h, d = image.decompose_hdab(normalize=False)
-    # axes[1][0].imshow(h, cmap="Blues", vmin=0, vmax=0.15)
-    # axes[1][1].imshow(d, cmap="Oranges", vmin=0, vmax=0.15)
-    # axes[2][0].imshow(mask1)
-    # axes[2][1].imshow(mask2)
-    # for ax in axes.flat:
-    #     ax.axis("off")
-
-    # # Per marker, tissue, donor
-    # markers = annot["marker"].unique()
-    # tissues = annot["tissue_name"].unique()
-    # donors = annot["donor_id"].unique()
-    # for var_, label, thresh2, kwargs in [
-    #     ("diaminobenzidine", "raw", 0.01, dict()),
-    #     ("norm_diaminobenzidine", "norm", 0, dict(xlim=(-3, 3))),
-    # ]:
-    #     for marker in markers:
-    #         print(label, marker)
-    #         n, m = len(tissues), len(donors)
-    #         fig, axes = plt.subplots(
-    #             n, m, figsize=(m * 2, n * 2), sharex=True, sharey=True
-    #         )
-    #         for i, tissue in enumerate(tissues):
-    #             for j, donor in enumerate(donors):
-    #                 p = quant.query(
-    #                     f"tissue_name == '{tissue}' & donor_id == '{donor}' & marker == '{marker}'"
-    #                 )
-    #                 if p.empty:
-    #                     axes[i, j].axis("off")
-    #                     continue
-    #                 sns.histplot(
-    #                     p[var_],
-    #                     stat="probability",
-    #                     ax=axes[i, j],
-    #                     # bins=50,
-    #                     rasterized=True,
-    #                 )
-    #                 axes[i, j].axvline(thresh2, linestyle="--", color="grey")
-    #                 f = (p[var_] > thresh2).sum() / p.shape[0]
-    #                 axes[i, j].text(thresh2, 0.25, s=f"{f * 100:.1f}%", ha="left")
-    #                 axes[i, j].set(xlabel=None, **kwargs)
-    #         for ax, tissue in zip(axes[:, 0], tissues):
-    #             ax.set(ylabel=tissue)
-    #         for ax, donor in zip(axes[0, :], donors):
-    #             ax.set(title=donor)
-
-    #         fig.suptitle(marker)
-    #         fig.savefig(
-    #             c.results_dir / f"intensity_values.{label}.histplot.{marker}.pdf",
-    #             **c.figkws,
-    #         )
-    #         plt.close(fig)
-
     # Threshold
     quant["pos"] = quant["norm_diaminobenzidine"] > thresh
-
-    # # Using GMM
-    # from imc.ops.mixture import get_population
-    # _pos = list()
-    # for file in quant['file'].unique():
-    #     q = quant.loc[quant['file'] == file].copy()
-    #     q["pos"] = get_population(q["diaminobenzidine"])
-    #     _pos.append(q)
-    #     # print(file, q.shape[0])
-    #     # q["pos"] = pd.Categorical(q['pos'])
-    #     # fig, stats = swarmboxenplot(data=q, x='pos', y='diaminobenzidine')
-    # pos = pd.concat(_pos)
 
     # Percent positive per image
     total_count = quant.groupby(["file"])["pos"].count().to_frame("cells")
     pos_count = quant.groupby(["file"])["pos"].sum().to_frame("positive")
 
-    p = total_count.join(pos_count).join(annot)
+    p = total_count.join(pos_count).join(annot.drop("file", axis=1))
     p["percent_positive"] = (p["positive"] / p["cells"]) * 100
     p.to_csv(c.results_dir / "percent_positive.per_marker.csv")
-    locations = [
-        "Chorionic Plate",
-        "Fetal Villi",
-        "Maternal Blood Space",
-        "Maternal Decidua",
-    ]
-    p = p.loc[p["tissue_name"].isin(locations)]
 
-    markers = quant["marker"].unique()
+    # Read in
+    p = pd.read_csv(c.results_dir / "percent_positive.per_marker.csv", index_col=0)
+    p["disease"] = pd.Categorical(
+        p["disease"], ordered=True, categories=["Control", "COVID"]
+    )
+    p["tissue_name"] = pd.Categorical(
+        p["tissue_name"], ordered=True, categories=c.tissues
+    )
+    p = p.loc[p["cells"] >= 10]
+
+    # Plot
+    # # Jointly, per marker
+    markers = p["marker"].unique()
     fig, axes = plt.subplots(
         1, len(markers), figsize=(len(markers) * 4, 1 * 4), sharey=True
     )
@@ -233,12 +135,31 @@ def main() -> int:
             ax=ax,
             plot_kws=dict(palette="tab20"),
         )
-        # _stats.append(stats.assign(marker=marker))
         ax.set_title(marker)
-    # stats = pd.concat(_stats)
-    # stats.to_csv(c.results_dir / "percent_positive.per_marker.per_patient.statistics.csv")
     fig.savefig(
         c.results_dir / "percent_positive.per_marker.per_patient.swarmboxenplot.svg",
+        **c.figkws,
+    )
+
+    # # Jointly, per tissue
+    fig, axes = plt.subplots(1, len(c.tissues), figsize=(len(c.tissues) * 4, 1 * 3.7))
+    for tissue, ax in zip(c.tissues, axes.T):
+        pp = p.query(f"tissue_name == '{tissue}'")
+        if pp.empty:
+            continue
+        swarmboxenplot(
+            data=pp,
+            x="disease",
+            y="percent_positive",
+            hue="marker",
+            test=False,
+            swarm=True,
+            ax=ax,
+            plot_kws=dict(palette="Set1"),
+        )
+        ax.set_title(tissue)
+    fig.savefig(
+        c.results_dir / "percent_positive.per_tissue.per_marker.swarmboxenplot.svg",
         **c.figkws,
     )
 
@@ -271,21 +192,25 @@ def main() -> int:
     plt.close(fig)
 
     # # Separately
-    p["label"] = p["marker"] + " - " + p["tissue_name"]
-    q = p.drop("file", axis=1).pivot_table(
-        index="file", columns="label", values="percent_positive"
-    )
+    p["label"] = p["marker"] + " - " + p["tissue_name"].astype(str)
+    cats = [m + " - " + t for m in markers for t in c.tissues]
+    p["label"] = pd.Categorical(p["label"], ordered=True, categories=cats)
+    q = p.pivot_table(index="file", columns="label", values="percent_positive")[cats]
+
     fig, stats = swarmboxenplot(
         data=q.join(annot[["disease"]]),
         x="disease",
         y=q.columns,
         test=True,
         swarm=True,
+        plot_kws=dict(size=3, alpha=0.2),
+        fig_kws=dict(nrows=3, ncols=4, figsize=(7, 9)),
     )
     stats["p-cor"] = pg.multicomp(stats["p-unc"].values, method="fdr_bh")[1]
     stats.to_csv(c.results_dir / "percent_positive.per_marker.per_disease.statistics.csv")
     fig.savefig(
-        c.results_dir / "percent_positive.per_marker.per_disease.swarmboxenplot.svg",
+        c.results_dir
+        / "percent_positive.per_marker.per_disease.swarmboxenplot.separate.svg",
         **c.figkws,
     )
     for ax in fig.axes:
@@ -293,6 +218,71 @@ def main() -> int:
     fig.savefig(
         c.results_dir
         / "percent_positive.per_marker.per_disease.swarmboxenplot.fixed_scale.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    # As heatmap
+
+    # # Absolute values
+    pp = p.pivot_table(
+        index="marker", columns=["disease", "tissue_name"], values="percent_positive"
+    )
+    kws = dict(square=True, cbar_kws=dict(label="% positive cells"))
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(pp, **kws, ax=ax)
+    fig.savefig(
+        c.results_dir
+        / "percent_positive.per_marker.per_tissue.absolute.heatmap.by_disease.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    pp = p.pivot_table(
+        index="marker", columns=["tissue_name", "disease"], values="percent_positive"
+    )
+
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(pp, **kws, ax=ax)
+    fig.savefig(
+        c.results_dir
+        / "percent_positive.per_marker.per_tissue.absolute.heatmap.interleaved.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    # # Fold-changes
+    stats = stats.join(
+        stats["Variable"]
+        .str.split(" - ")
+        .apply(pd.Series)
+        .rename(columns={0: "marker", 1: "tissue"})
+    )
+    fc = stats.pivot_table(index="marker", columns="tissue", values="hedges")
+    fc = fc[c.tissues] * -1
+    pvals = stats.pivot_table(index="marker", columns="tissue", values="p-cor")
+    pvals = ((pvals < 0.05) & (pvals > 0.01)).replace({True: 1}) + (
+        (pvals < 0.01)
+    ).replace({True: 2})
+
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(
+        fc,
+        ax=ax,
+        center=0,
+        cmap="RdBu_r",
+        square=True,
+        cbar_kws=dict(label="Log fold change (COVID / Control)"),
+        annot=pvals,
+    )
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
+    r = {"0": "", "1": "*", "2": "**"}
+    for e in ax.get_children():
+        if isinstance(e, matplotlib.text.Text):
+            if e.get_text() in r:
+                e.set_text(r[e.get_text()])
+    fig.savefig(
+        c.results_dir / "percent_positive.per_marker.per_tissue.fold_change.heatmap.svg",
         **c.figkws,
     )
     plt.close(fig)
