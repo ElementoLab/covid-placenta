@@ -192,7 +192,7 @@ def main() -> int:
     plt.close(fig)
 
     # # Separately
-    p["label"] = p["marker"] + " - " + p["tissue_name"].astype(str)
+    p["label"] = p["marker"].astype(str) + " - " + p["tissue_name"].astype(str)
     cats = [m + " - " + t for m in markers for t in c.tissues]
     p["label"] = pd.Categorical(p["label"], ordered=True, categories=cats)
     q = p.pivot_table(index="file", columns="label", values="percent_positive")[cats]
@@ -204,13 +204,13 @@ def main() -> int:
         test=True,
         swarm=True,
         plot_kws=dict(size=3, alpha=0.2),
-        fig_kws=dict(nrows=3, ncols=4, figsize=(7, 9)),
+        fig_kws=dict(nrows=3, ncols=4, figsize=(7, 9), sharey="col"),
     )
     stats["p-cor"] = pg.multicomp(stats["p-unc"].values, method="fdr_bh")[1]
     stats.to_csv(c.results_dir / "percent_positive.per_marker.per_disease.statistics.csv")
     fig.savefig(
         c.results_dir
-        / "percent_positive.per_marker.per_disease.swarmboxenplot.separate.svg",
+        / "percent_positive.per_marker.per_disease.swarmboxenplot.separate.fixed_scale_per_tissue.svg",
         **c.figkws,
     )
     for ax in fig.axes:
@@ -325,6 +325,179 @@ def main() -> int:
     )
 
     return 0
+
+
+def cd163():
+    def segment_stain(image):
+        import skimage
+
+        t = skimage.filters.threshold_otsu(image)
+        q = skimage.morphology.remove_small_objects(image > t, 5)
+        return skimage.morphology.dilation(q > t, skimage.morphology.disk(1))
+
+    images, annot = get_files(
+        input_dir=c.data_dir, exclude_patterns=["_old", "mask", "C_1", "fluo"]
+    )
+    annot = annot.query("marker == 'CD163'")
+    images = [i for i in images if i.fname in annot.index]
+
+    # Overal intensity
+    _int = dict()
+    for image in tqdm(images):
+        _int[image.fname] = image.decompose_hdab().mean((1, 2))
+    intensity = pd.DataFrame(_int, index=["hematoxilyn", "diaminobenzidine"]).T.join(
+        annot
+    )
+
+    # Segment stains
+    _pos = dict()
+    for image in tqdm(images):
+        h, d = image.decompose_hdab()
+        hem_mask = segment_stain(h)
+        dab_mask = segment_stain(d)
+        _pos[image.fname] = {
+            "hematoxilyn": hem_mask.sum() / hem_mask.size,
+            "diaminobenzidine": dab_mask.sum() / dab_mask.size,
+        }
+
+        fig, axes = plt.subplots(1, 3, sharex=True, sharey=True)
+        axes[0].imshow(image.image)
+        axes[1].imshow(hem_mask)
+        axes[2].imshow(dab_mask)
+        for ax in axes:
+            ax.axis("off")
+        fig.savefig(image.fname.replace(".tiff", ".stain_segmentation.svg"), **c.figkws)
+        plt.close(fig)
+
+    pos = pd.DataFrame(_pos).T.join(annot)
+    pos["tissue_name"] = pd.Categorical(
+        pos["tissue_name"], categories=c.tissues, ordered=True
+    )
+    pos["norm_diaminobenzidine"] = pos["diaminobenzidine"] / pos["hematoxilyn"]
+    pos["log_norm_diaminobenzidine"] = np.log(pos["norm_diaminobenzidine"])
+
+    # Plot
+    fig, axes = plt.subplots(4, 4, figsize=(4 * 2, 4 * 3), sharex=True, sharey="row")
+    for ax, tissue in zip(axes.T, c.tissues):
+        pp = pos.query(f"tissue_name == '{tissue}'")
+        _ = swarmboxenplot(
+            data=pp,
+            x="disease",
+            y=[
+                "hematoxilyn",
+                "diaminobenzidine",
+                "norm_diaminobenzidine",
+                "log_norm_diaminobenzidine",
+            ],
+            plot_kws=dict(palette="tab10"),
+            ax=ax,
+        )
+        ax[0].set(title=tissue)
+    fig.tight_layout()
+    fig.savefig(
+        c.results_dir
+        / "image_quantification.CD163.stain_segmentation.swarmboxenplot.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    # fig, axes = plt.subplots(4, 4, figsize=(4 * 2, 4 * 3), sharex=True, sharey="row")
+    # for ax, tissue in zip(axes.T, c.tissues):
+    #     pp = pos.query(f"tissue_name == '{tissue}'")
+    #     swarmboxenplot(
+    #         data=pp,
+    #         x="disease",
+    #         y=[
+    #             "hematoxilyn",
+    #             "diaminobenzidine",
+    #             "norm_diaminobenzidine",
+    #             "log_norm_diaminobenzidine",
+    #         ],
+    #         hue="donor_id",
+    #         plot_kws=dict(palette="tab10"),
+    #         ax=ax,
+    #         test=False,
+    #     )
+    #     ax[0].set(title=tissue)
+    # fig.tight_layout()
+    # fig.savefig(
+    #     c.results_dir
+    #     / "image_quantification.CD163.stain_segmentation.by_patient.swarmboxenplot.svg",
+    #     **c.figkws,
+    # )
+    # plt.close(fig)
+
+    # # Segment cells
+    # segment(images, annot, overwrite=True)
+
+    # # Plot
+    # fig, axes = plt.subplots(4, 2, figsize=(4 * 4, 4))
+    # for ax, tissue in zip(axes, intensity["tissue_name"].unique()):
+    #     pp = intensity.query(f"tissue_name == '{tissue}'")
+    #     stats = swarmboxenplot(
+    #         data=pp,
+    #         x="disease",
+    #         y=["hematoxilyn", "diaminobenzidine"],
+    #         plot_kws=dict(palette="tab10"),
+    #         ax=ax,
+    #     )
+
+    # # Quantify
+    # _quant = parmap.map(quantify, images, pm_pbar=True)
+    # quant = pd.concat(_quant).drop_duplicates()
+    # annot["file"] = [image.fname for image in images]
+    # quant = (
+    #     quant.reset_index()
+    #     .merge(annot.drop("marker", axis=1), on="file")
+    #     .set_index("cell_id")
+    # )
+    # quant.to_csv(c.results_dir / "image_quantification.CD163.csv")
+    # quant = pd.read_csv(c.results_dir / "image_quantification.CD163.csv", index_col=0)
+
+    # # Threshold
+    # thresh = 0
+    # quant["pos"] = quant["norm_diaminobenzidine"] > thresh
+
+    # # Percent positive per image
+    # total_count = quant.groupby(["file"])["pos"].count().to_frame("cells")
+    # pos_count = quant.groupby(["file"])["pos"].sum().to_frame("positive")
+
+    # p = total_count.join(pos_count).join(annot.drop("file", axis=1))
+    # p["percent_positive"] = (p["positive"] / p["cells"]) * 100
+
+    # # Read in
+    # p["disease"] = pd.Categorical(
+    #     p["disease"], ordered=True, categories=["Control", "COVID"]
+    # )
+    # p["tissue_name"] = pd.Categorical(
+    #     p["tissue_name"], ordered=True, categories=c.tissues
+    # )
+    # p = p.loc[p["cells"] >= 10]
+
+    # # Plot
+    # fig, axes = plt.subplots(1, 4, figsize=(4 * 4, 4))
+    # for ax, tissue in zip(axes, p["tissue_name"].unique()):
+    #     pp = p.query(f"tissue_name == '{tissue}'")
+    #     stats = swarmboxenplot(
+    #         data=pp,
+    #         x="disease",
+    #         y="percent_positive",
+    #         plot_kws=dict(palette="tab10"),
+    #         ax=ax,
+    #     )
+    #     ax.set_title(tissue)
+    # fig.savefig(
+    #     c.results_dir / "CD163.percent_positive.per_tissue.swarmboxenplot.pdf",
+    #     **c.figkws,
+    # )
+    # plt.close(fig)
+
+    # count = (
+    #     quant.groupby(["donor_id", "tissue_name", "marker", "image"])["X_centroid"]
+    #     .count()
+    #     .rename("nuclei_count")
+    # )
+    # count.to_csv(c.results_dir / "CD163.nuclei_count.csv")
 
 
 def _unpack_data(force: bool = True):
@@ -477,6 +650,9 @@ def segment(images, annot, model="2D_versatile_fluo", overwrite: bool = False):
             h[h > 0.15] = 0.15
         elif _model.name.endswith("he"):
             h = image.image / 255
+        tifffile.imwrite(
+            image.fname.replace(".tiff", ".fluo.tiff"), (h * 255).astype("uint8")
+        )
         # if mag != 10:
         #     h = resize_magnification(h, mag / 10)
         mask, _ = _model.predict_instances(h)
