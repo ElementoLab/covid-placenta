@@ -500,6 +500,130 @@ def cd163():
     # count.to_csv(c.results_dir / "CD163.nuclei_count.csv")
 
 
+def plot_deconvolution():
+    from seaborn_extensions import clustermap
+
+    opts = [
+        ("CYBERSORT", "placenta.deconv.v2.xlsx", dict(nrows=16)),
+        (
+            "marker_based",
+            "marker.based.estimated relative cell expression.xlsx",
+            dict(nrows=19),
+        ),
+    ]
+    for name, fname, kws in opts:
+        oprefix = c.results_dir / f"cellular_deconvolution.{name}."
+        dec = pd.read_excel(c.metadata_dir / "original" / fname, index_col=0, **kws)
+        dec *= 100
+        annot = dec.columns.to_series().str.split("_").apply(pd.Series).drop(0, axis=1)
+        annot.columns = ["sample_group", "sample_id"]
+        annot["sample_group"] = pd.Categorical(
+            annot["sample_group"],
+            ordered=True,
+            categories=["Control", "Inflammatory", "Positive", "Borderline", "High"],
+        )
+
+        if name == "CYBERSORT":
+            mean = dec.T.groupby(annot["sample_group"]).mean()
+            v = mean.values.max()
+            v += v * 0.1
+            grid = clustermap(
+                mean,
+                cbar_kws=dict(label="Inferred cellular\ncomposition"),
+                dendrogram_ratio=0.1,
+                vmax=v,
+                figsize=(5, 4.5),
+            )
+            grid.fig.savefig(oprefix + "clustermap.svg", **c.figkws)
+
+            grid = clustermap(
+                mean,
+                config="z",
+                cbar_kws=dict(label="Inferred cellular\ncomposition (Z-score)"),
+                dendrogram_ratio=0.1,
+                figsize=(5, 4.5),
+                col_colors=dec.mean(1).rename("Mean cell type abundance"),
+            )
+            grid.fig.savefig(oprefix + "clustermap.z.svg", **c.figkws)
+
+            mean = dec.T.groupby(
+                annot["sample_group"].replace("Borderline", "Positive")
+            ).mean()
+            v = mean.values.max()
+            v += v * 0.1
+            grid = clustermap(
+                mean,
+                cbar_kws=dict(label="Inferred cellular\ncomposition"),
+                dendrogram_ratio=0.1,
+                vmax=v,
+                figsize=(5, 4),
+            )
+            grid.fig.savefig(oprefix + "clustermap.no_borderline.svg", **c.figkws)
+            grid = clustermap(
+                mean,
+                config="z",
+                cbar_kws=dict(label="Inferred cellular\ncomposition (Z-score)"),
+                dendrogram_ratio=0.1,
+                figsize=(5, 4),
+                col_colors=dec.mean(1).rename("Mean cell type abundance"),
+            )
+            grid.fig.savefig(oprefix + "clustermap.z.no_borderline.svg", **c.figkws)
+        else:
+            mean = dec.T.groupby(annot["sample_group"]).mean()
+            grid = clustermap(
+                mean,
+                cbar_kws=dict(label="Inferred cellular\ncomposition"),
+                dendrogram_ratio=0.1,
+                cmap="RdBu_r",
+                center=0,
+                figsize=(5, 4.5),
+            )
+            grid.fig.savefig(oprefix + "clustermap.svg", **c.figkws)
+
+            mean = dec.T.groupby(
+                annot["sample_group"].replace("Borderline", "Positive")
+            ).mean()
+            grid = clustermap(
+                mean,
+                cbar_kws=dict(label="Inferred cellular\ncomposition"),
+                dendrogram_ratio=0.1,
+                cmap="RdBu_r",
+                center=0,
+                figsize=(5, 4),
+            )
+            grid.fig.savefig(oprefix + "clustermap.no_borderline.svg", **c.figkws)
+
+        p = dec.T.join(annot)
+        fig, stats = swarmboxenplot(
+            data=p,
+            x="sample_group",
+            y=dec.index,
+            plot_kws=dict(paletter="inferno"),
+            fig_kws=dict(figsize=(7, 7)),
+        )
+        # for ax in fig.axes:
+        #     ax.set_ylim((-5, 50))
+        fig.savefig(oprefix + "swarmboxenplot.svg", **c.figkws)
+
+        q = annot.copy()
+        q.loc[q["sample_group"] == "Borderline", "sample_group"] = "Positive"
+        q["sample_group"] = q["sample_group"].cat.remove_unused_categories()
+        p = dec.T.join(q)
+        fig, stats = swarmboxenplot(
+            data=p,
+            x="sample_group",
+            y=dec.index,
+            plot_kws=dict(paletter="inferno"),
+            fig_kws=dict(figsize=(7, 7)),
+        )
+        # for ax in fig.axes:
+        #     ax.set_ylim((-5, 50))
+        fig.savefig(
+            oprefix + "swarmboxenplot.no_borderline.svg",
+            **c.figkws,
+        )
+
+
 def _unpack_data(force: bool = True):
     """
     Function to unpack data from zipfiles and homogeneize file structures across cases.
