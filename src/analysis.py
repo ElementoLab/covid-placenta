@@ -26,15 +26,20 @@ from src.ihclib import Image, downcast_int
 
 def main() -> int:
     images, annot = get_files(
-        input_dir=c.data_dir, exclude_patterns=["_old", "mask", "C_1", "CD163"]
+        input_dir=c.data_dir, exclude_patterns=["_old", "mask", "fluo"]
     )
+    # C_1 exclude all but CD163
+    annot = annot.query(
+        """(donor_id != 'C_1 pt 11267') or ((donor_id == 'C_1 pt 11267') and (marker == 'CD163'))"""
+    )
+    images = [i for i in images if i.fname in annot.index]
     annot.to_csv(c.metadata_dir / "image_annotation.csv")
 
     # Dataset structure
     check_dataset_structure(annot)
 
     # Segment
-    segment(images, annot, overwrite=True)
+    segment(images, annot, overwrite=False)
 
     # Visualize decompositin and segmentation # # one random image per group
     cols = ["marker", "tissue_name", "donor_id"]
@@ -55,6 +60,7 @@ def main() -> int:
 
     # Read in
     quant = pd.read_csv(c.results_dir / "image_quantification.csv", index_col=0)
+    quant = filter_cells_based_on_annotations(quant)
     thresh = 0
 
     # Plot morphology
@@ -194,7 +200,7 @@ def main() -> int:
     # # Separately
     p["label"] = p["marker"].astype(str) + " - " + p["tissue_name"].astype(str)
     cats = [m + " - " + t for m in markers for t in c.tissues]
-    p["label"] = pd.Categorical(p["label"], ordered=True, categories=cats)
+    # p["label"] = pd.Categorical(p["label"], ordered=True, categories=cats)
     q = p.pivot_table(index="file", columns="label", values="percent_positive")[cats]
 
     fig, stats = swarmboxenplot(
@@ -204,8 +210,10 @@ def main() -> int:
         test=True,
         swarm=True,
         plot_kws=dict(size=3, alpha=0.2),
-        fig_kws=dict(nrows=3, ncols=4, figsize=(7, 9), sharey="col"),
+        fig_kws=dict(nrows=4, ncols=4, figsize=(7, 12), sharey="col"),
     )
+    # for ax in fig.axes:
+    #     ax.set_ylim(bottom=-5)
     stats["p-cor"] = pg.multicomp(stats["p-unc"].values, method="fdr_bh")[1]
     stats.to_csv(c.results_dir / "percent_positive.per_marker.per_disease.statistics.csv")
     fig.savefig(
@@ -220,111 +228,94 @@ def main() -> int:
         / "percent_positive.per_marker.per_disease.swarmboxenplot.fixed_scale.svg",
         **c.figkws,
     )
-    plt.close(fig)
+    plt.close("all")
 
-    # As heatmap
-
-    # # Absolute values
-    pp = p.pivot_table(
-        index="marker", columns=["disease", "tissue_name"], values="percent_positive"
-    )
-    kws = dict(square=True, cbar_kws=dict(label="% positive cells"))
-    fig, ax = plt.subplots(figsize=(3, 3))
-    sns.heatmap(pp, **kws, ax=ax)
-    fig.savefig(
-        c.results_dir
-        / "percent_positive.per_marker.per_tissue.absolute.heatmap.by_disease.svg",
-        **c.figkws,
-    )
-    plt.close(fig)
-
-    pp = p.pivot_table(
-        index="marker", columns=["tissue_name", "disease"], values="percent_positive"
-    )
-
-    fig, ax = plt.subplots(figsize=(3, 3))
-    sns.heatmap(pp, **kws, ax=ax)
-    fig.savefig(
-        c.results_dir
-        / "percent_positive.per_marker.per_tissue.absolute.heatmap.interleaved.svg",
-        **c.figkws,
-    )
-    plt.close(fig)
-
-    # # Fold-changes
-    stats = stats.join(
-        stats["Variable"]
-        .str.split(" - ")
-        .apply(pd.Series)
-        .rename(columns={0: "marker", 1: "tissue"})
-    )
-    fc = stats.pivot_table(index="marker", columns="tissue", values="hedges")
-    fc = fc[c.tissues] * -1
-    pvals = stats.pivot_table(index="marker", columns="tissue", values="p-cor")
-    pvals = ((pvals < 0.05) & (pvals > 0.01)).replace({True: 1}) + (
-        (pvals < 0.01)
-    ).replace({True: 2})
-
-    fig, ax = plt.subplots(figsize=(3, 3))
-    sns.heatmap(
-        fc,
-        ax=ax,
-        center=0,
-        cmap="RdBu_r",
-        square=True,
-        cbar_kws=dict(label="Log fold change (COVID / Control)"),
-        annot=pvals,
-    )
-    ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
-    r = {"0": "", "1": "*", "2": "**"}
-    for e in ax.get_children():
-        if isinstance(e, matplotlib.text.Text):
-            if e.get_text() in r:
-                e.set_text(r[e.get_text()])
-    fig.savefig(
-        c.results_dir / "percent_positive.per_marker.per_tissue.fold_change.heatmap.svg",
-        **c.figkws,
-    )
-    plt.close(fig)
-
-    # Visualize decomposition, segmentation and thresholding jointly
-    # # Select top/bottom N to visualize
-    to_demo = list()
-    to_demo += q["CD3 - Fetal Villi"].nlargest(5).index.tolist()
-    to_demo += q["CD3 - Fetal Villi"].nsmallest(5).index.tolist()
-    to_demo += q["CD3 - Maternal Blood Space"].nlargest(5).index.tolist()
-    to_demo += q["CD3 - Maternal Blood Space"].nsmallest(5).index.tolist()
-    si = [i for i in images if i.fname in to_demo]
-    visualize(
-        si,
-        c.results_dir,
-        quant=quant,
-        output_suffix=".representative_differential.top_bottom",
-    )
-
-    # Select randomly two images per class to contrast
-    to_demo = list()
-    for tissue in ["Fetal Villi", "Maternal Blood Space"]:
-        for dis in ["Control", "COVID"]:
-            sel = (
-                annot.query(
-                    f"tissue_name == '{tissue}' and disease == '{dis}'",
-                    engine="python",
-                )
-                .sample(n=5)
-                .index
-            )
-            to_demo += sel.tolist()
-
-    si = [i for i in images if i.fname in to_demo]
-    visualize(
-        si,
-        c.results_dir,
-        quant=quant,
-        output_suffix=".representative_differential.random",
-    )
+    for marker in markers:
+        fig, stats = swarmboxenplot(
+            data=p.query(f"marker == '{marker}'"),
+            x="tissue_name",
+            y="percent_positive",
+            hue="disease",
+            test=True,
+            swarm=True,
+            plot_kws=dict(size=3, alpha=0.2),
+        )
+        fig.axes[0].set(title=marker)
+        fig.savefig(
+            c.results_dir / f"percent_positive.{marker}.per_disease.swarmboxenplot.svg",
+            **c.figkws,
+        )
+        plt.close(fig)
 
     return 0
+
+
+def filter_cells_based_on_annotations(quant, plot=False):
+    import json
+
+    from matplotlib.backends.backend_pdf import PdfPages
+
+    if plot:
+        pdf = PdfPages(c.results_dir / "annotation_visualizations.pdf")
+
+    quant = quant.reset_index()
+
+    shape = tifffile.imread(quant.iloc[0]["file"]).shape[:2]
+    sel = (quant["marker"] == "CD163") & (quant["tissue_name"] == "Maternal Blood Space")
+    files = quant.loc[sel, "file"].drop_duplicates().sort_values()
+
+    _quant = list()
+    jsons = dict()
+    for file in tqdm(files):
+        jf = Path(file.replace(".tiff", ".json"))
+        if not jf.exists():
+            continue
+
+        j = json.load(jf.open())
+        jsons[file] = j["shapes"]
+        tmasks = dict(B=np.zeros(shape, dtype=int), V=np.zeros(shape, dtype=int))
+        for poly in j["shapes"]:
+            label = poly["label"]
+            if label not in ["V", "B"]:
+                continue
+            tmasks[label] += polygon_to_mask(poly["points"], shape[::-1]).astype(int)
+        tmask = (tmasks["B"] > 0).astype(int) - (tmasks["V"] > 0).astype(int)
+
+        # Overlay cell mask with topological mask
+        mask_f = file.replace(".tiff", ".stardist_mask.tiff")
+        mask = tifffile.imread(mask_f)
+        sel_cells = np.unique(mask[(mask > 0) & (tmask > 0)])
+        _quant.append(
+            quant.loc[sel & (quant["file"] == file) & (quant["cell_id"].isin(sel_cells))]
+        )
+
+        if plot:
+            fig, axes = plt.subplots(1, 4, figsize=(4 * 4, 4))
+            axes[0].imshow(tifffile.imread(file))
+            axes[1].imshow(mask)
+            axes[2].imshow(tmask)
+            mask[~np.isin(mask, sel_cells)] = 0
+            axes[3].imshow(mask)
+            axes[0].text(0, shape[0] + 100, s="/".join(file.split("/")[1:]))
+            labels = [
+                "Original image",
+                "Cellular mask",
+                "Tissue mask",
+                "Cellular mask\nin Maternal Blood Space",
+            ]
+            for ax, label in zip(axes, labels):
+                ax.set(title=label)
+                ax.axis("off")
+            pdf.savefig(fig, **c.figkws)
+            plt.close(fig)
+    if plot:
+        pdf.close()
+
+    json.dump(
+        jsons, open(c.metadata_dir / "image_polygon_annotations.json", "w"), indent=4
+    )
+
+    return quant.loc[~sel].append(pd.concat(_quant)).sort_values(["file"])
 
 
 def cd163():
@@ -401,120 +392,17 @@ def cd163():
     )
     plt.close(fig)
 
-    # fig, axes = plt.subplots(4, 4, figsize=(4 * 2, 4 * 3), sharex=True, sharey="row")
-    # for ax, tissue in zip(axes.T, c.tissues):
-    #     pp = pos.query(f"tissue_name == '{tissue}'")
-    #     swarmboxenplot(
-    #         data=pp,
-    #         x="disease",
-    #         y=[
-    #             "hematoxilyn",
-    #             "diaminobenzidine",
-    #             "norm_diaminobenzidine",
-    #             "log_norm_diaminobenzidine",
-    #         ],
-    #         hue="donor_id",
-    #         plot_kws=dict(palette="tab10"),
-    #         ax=ax,
-    #         test=False,
-    #     )
-    #     ax[0].set(title=tissue)
-    # fig.tight_layout()
-    # fig.savefig(
-    #     c.results_dir
-    #     / "image_quantification.CD163.stain_segmentation.by_patient.swarmboxenplot.svg",
-    #     **c.figkws,
-    # )
-    # plt.close(fig)
-
-    # # Segment cells
-    # segment(images, annot, overwrite=True)
-
-    # # Plot
-    # fig, axes = plt.subplots(4, 2, figsize=(4 * 4, 4))
-    # for ax, tissue in zip(axes, intensity["tissue_name"].unique()):
-    #     pp = intensity.query(f"tissue_name == '{tissue}'")
-    #     stats = swarmboxenplot(
-    #         data=pp,
-    #         x="disease",
-    #         y=["hematoxilyn", "diaminobenzidine"],
-    #         plot_kws=dict(palette="tab10"),
-    #         ax=ax,
-    #     )
-
-    # # Quantify
-    # _quant = parmap.map(quantify, images, pm_pbar=True)
-    # quant = pd.concat(_quant).drop_duplicates()
-    # annot["file"] = [image.fname for image in images]
-    # quant = (
-    #     quant.reset_index()
-    #     .merge(annot.drop("marker", axis=1), on="file")
-    #     .set_index("cell_id")
-    # )
-    # quant.to_csv(c.results_dir / "image_quantification.CD163.csv")
-    # quant = pd.read_csv(c.results_dir / "image_quantification.CD163.csv", index_col=0)
-
-    # # Threshold
-    # thresh = 0
-    # quant["pos"] = quant["norm_diaminobenzidine"] > thresh
-
-    # # Percent positive per image
-    # total_count = quant.groupby(["file"])["pos"].count().to_frame("cells")
-    # pos_count = quant.groupby(["file"])["pos"].sum().to_frame("positive")
-
-    # p = total_count.join(pos_count).join(annot.drop("file", axis=1))
-    # p["percent_positive"] = (p["positive"] / p["cells"]) * 100
-
-    # # Read in
-    # p["disease"] = pd.Categorical(
-    #     p["disease"], ordered=True, categories=["Control", "COVID"]
-    # )
-    # p["tissue_name"] = pd.Categorical(
-    #     p["tissue_name"], ordered=True, categories=c.tissues
-    # )
-    # p = p.loc[p["cells"] >= 10]
-
-    # # Plot
-    # fig, axes = plt.subplots(1, 4, figsize=(4 * 4, 4))
-    # for ax, tissue in zip(axes, p["tissue_name"].unique()):
-    #     pp = p.query(f"tissue_name == '{tissue}'")
-    #     stats = swarmboxenplot(
-    #         data=pp,
-    #         x="disease",
-    #         y="percent_positive",
-    #         plot_kws=dict(palette="tab10"),
-    #         ax=ax,
-    #     )
-    #     ax.set_title(tissue)
-    # fig.savefig(
-    #     c.results_dir / "CD163.percent_positive.per_tissue.swarmboxenplot.pdf",
-    #     **c.figkws,
-    # )
-    # plt.close(fig)
-
-    # count = (
-    #     quant.groupby(["donor_id", "tissue_name", "marker", "image"])["X_centroid"]
-    #     .count()
-    #     .rename("nuclei_count")
-    # )
-    # count.to_csv(c.results_dir / "CD163.nuclei_count.csv")
-
 
 def plot_deconvolution():
     from seaborn_extensions import clustermap
 
     opts = [
-        ("CYBERSORT", "placenta.deconv.v2.xlsx", dict(nrows=16)),
-        (
-            "marker_based",
-            "marker.based.estimated relative cell expression.xlsx",
-            dict(nrows=19),
-        ),
+        ("CYBERSORT", "placenta.deconv.v2.xlsx", 100, dict(nrows=16)),
     ]
-    for name, fname, kws in opts:
+    for name, fname, factor, kws in opts:
         oprefix = c.results_dir / f"cellular_deconvolution.{name}."
         dec = pd.read_excel(c.metadata_dir / "original" / fname, index_col=0, **kws)
-        dec *= 100
+        dec *= factor
         annot = dec.columns.to_series().str.split("_").apply(pd.Series).drop(0, axis=1)
         annot.columns = ["sample_group", "sample_id"]
         annot["sample_group"] = pd.Categorical(
@@ -524,50 +412,39 @@ def plot_deconvolution():
         )
 
         if name == "CYBERSORT":
-            mean = dec.T.groupby(annot["sample_group"]).mean()
-            v = mean.values.max()
-            v += v * 0.1
-            grid = clustermap(
-                mean,
-                cbar_kws=dict(label="Inferred cellular\ncomposition"),
-                dendrogram_ratio=0.1,
-                vmax=v,
-                figsize=(5, 4.5),
-            )
-            grid.fig.savefig(oprefix + "clustermap.svg", **c.figkws)
-
-            grid = clustermap(
-                mean,
-                config="z",
-                cbar_kws=dict(label="Inferred cellular\ncomposition (Z-score)"),
-                dendrogram_ratio=0.1,
-                figsize=(5, 4.5),
-                col_colors=dec.mean(1).rename("Mean cell type abundance"),
-            )
-            grid.fig.savefig(oprefix + "clustermap.z.svg", **c.figkws)
-
             mean = dec.T.groupby(
                 annot["sample_group"].replace("Borderline", "Positive")
             ).mean()
             v = mean.values.max()
             v += v * 0.1
-            grid = clustermap(
-                mean,
-                cbar_kws=dict(label="Inferred cellular\ncomposition"),
-                dendrogram_ratio=0.1,
-                vmax=v,
-                figsize=(5, 4),
-            )
-            grid.fig.savefig(oprefix + "clustermap.no_borderline.svg", **c.figkws)
-            grid = clustermap(
-                mean,
-                config="z",
-                cbar_kws=dict(label="Inferred cellular\ncomposition (Z-score)"),
-                dendrogram_ratio=0.1,
-                figsize=(5, 4),
-                col_colors=dec.mean(1).rename("Mean cell type abundance"),
-            )
-            grid.fig.savefig(oprefix + "clustermap.z.no_borderline.svg", **c.figkws)
+            for cmap in [
+                "summer",
+                "hot",
+                "afmhot",
+                "copper",
+                "viridis",
+                "plasma",
+                "magma",
+                "cividis",
+                "Reds",
+                "OrRd",
+                "Oranges",
+                "RdPu",
+                "BuPu",
+                "BuGn",
+            ]:
+                grid = clustermap(
+                    mean.sort_index(ascending=False),
+                    cbar_kws=dict(label="Inferred cellular\ncomposition"),
+                    dendrogram_ratio=0.1,
+                    row_cluster=False,
+                    vmax=v,
+                    figsize=(5, 4),
+                    cmap=cmap,
+                )
+                grid.fig.savefig(
+                    oprefix + f"clustermap.no_borderline.{cmap}.pdf", **c.figkws
+                )
         else:
             mean = dec.T.groupby(annot["sample_group"]).mean()
             grid = clustermap(
@@ -601,8 +478,6 @@ def plot_deconvolution():
             plot_kws=dict(paletter="inferno"),
             fig_kws=dict(figsize=(7, 7)),
         )
-        # for ax in fig.axes:
-        #     ax.set_ylim((-5, 50))
         fig.savefig(oprefix + "swarmboxenplot.svg", **c.figkws)
 
         q = annot.copy()
@@ -616,47 +491,10 @@ def plot_deconvolution():
             plot_kws=dict(paletter="inferno"),
             fig_kws=dict(figsize=(7, 7)),
         )
-        # for ax in fig.axes:
-        #     ax.set_ylim((-5, 50))
         fig.savefig(
             oprefix + "swarmboxenplot.no_borderline.svg",
             **c.figkws,
         )
-
-
-def _unpack_data(force: bool = True):
-    """
-    Function to unpack data from zipfiles and homogeneize file structures across cases.
-    Should only be run once if starting from zipfiles downloaded from box.com.
-    """
-    import shutil
-    import zipfile
-
-    for s in ["H_2 pt 14059", "C_4 pt 26799", "C_1 pt 11267"]:
-        # Clean slate
-        d = c.data_dir / s
-        if force:
-            shutil.rmtree(d)
-        # Extract
-        f = d + ".zip"
-        if not d.exists() or force:
-            with zipfile.ZipFile(f) as zf:
-                zf.extractall(d)
-        # remove 'extra' files
-        for f in d.glob("**/*.czi"):
-            f.unlink()
-        for f in d.glob("**/.DS_Store"):
-            f.unlink()
-
-        # fix duplicated folders
-        for marker in d.iterdir():
-            for tissue1 in marker.iterdir():
-                for tissue2 in tissue1.iterdir():
-                    if tissue2.name != tissue1.name:
-                        continue
-                    for file in tissue2.iterdir():
-                        file.replace(tissue1 / file.name)
-                    tissue2.rmdir()
 
 
 def get_files(
@@ -920,6 +758,39 @@ def quantify(
     #     m = quantify_cell_morphology(image.mask, border_objs=True)
     #     q = q.join(m)
     #     _quant.append(q.assign(file=image.fname))
+
+
+def polygon_to_mask(
+    polygon_vertices: tp.Sequence[tp.Sequence[float]],
+    shape: tp.Tuple[int, int],
+    including_edges: bool = True,
+) -> Array:
+    """
+    Convert a set of vertices to a binary array.
+
+    Adapted and extended from: https://stackoverflow.com/a/36759414/1469535.
+    """
+    from shapely.geometry import Polygon, MultiPolygon
+    from shapely.geometry.collection import GeometryCollection
+
+    if including_edges:
+        # This makes sure edge pixels are also positive
+        grid = Polygon([(0, 0), (shape[0], 0), (shape[0], shape[1]), (0, shape[1])])
+        poly = Polygon(polygon_vertices)
+        if not poly.is_valid:
+            poly = poly.buffer(0)
+        inter = grid.intersection(poly)
+        if isinstance(inter, (MultiPolygon, GeometryCollection)):
+            return np.asarray([polygon_to_mask(x, shape) for x in inter.geoms]).sum(0) > 0
+        inter_verts = np.asarray(inter.exterior.coords.xy).T.tolist()
+    else:
+        inter_verts = polygon_vertices
+    x, y = np.meshgrid(np.arange(shape[0]), np.arange(shape[1]))
+    x, y = x.flatten(), y.flatten()
+    points = np.vstack((x, y)).T
+    path = matplotlib.path.Path(inter_verts)
+    grid = path.contains_points(points, radius=-1)
+    return grid.reshape((shape[1], shape[0]))
 
 
 if __name__ == "__main__" and "get_ipython" not in locals():
