@@ -247,10 +247,98 @@ def main() -> int:
         )
         plt.close(fig)
 
+    # As heatmap
+    # # Absolute values
+    pp = p.pivot_table(
+        index="marker", columns=["disease", "tissue_name"], values="percent_positive"
+    )
+    kws = dict(square=True, cbar_kws=dict(label="% positive cells"))
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(pp, **kws, ax=ax)
+    fig.savefig(
+        c.results_dir
+        / "percent_positive.per_marker.per_tissue.absolute.heatmap.by_disease.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    ppz = ((pp.T - pp.mean(1)) / pp.std(1)).T
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(ppz, **kws, ax=ax, cmap="RdBu_r", center=0)
+    fig.savefig(
+        c.results_dir
+        / "percent_positive.per_marker.per_tissue.absolute.heatmap.by_disease.zscore.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    pp = p.pivot_table(
+        index="marker", columns=["tissue_name", "disease"], values="percent_positive"
+    )
+
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(pp, **kws, ax=ax)
+    fig.savefig(
+        c.results_dir
+        / "percent_positive.per_marker.per_tissue.absolute.heatmap.interleaved.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    ppz = ((pp.T - pp.mean(1)) / pp.std(1)).T
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(ppz, **kws, ax=ax, cmap="RdBu_r", center=0)
+    fig.savefig(
+        c.results_dir
+        / "percent_positive.per_marker.per_tissue.absolute.heatmap.interleaved.zscore.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
+    # # Fold-changes
+    stats = stats.join(
+        stats["Variable"]
+        .str.split(" - ")
+        .apply(pd.Series)
+        .rename(columns={0: "marker", 1: "tissue"})
+    )
+    fc = stats.pivot_table(index="marker", columns="tissue", values="hedges")
+    fc = fc[c.tissues] * -1
+    pvals = stats.pivot_table(index="marker", columns="tissue", values="p-cor")
+    pvals = ((pvals < 0.05) & (pvals > 0.01)).replace({True: 1}) + (
+        (pvals < 0.01)
+    ).replace({True: 2})
+
+    fig, ax = plt.subplots(figsize=(3, 3))
+    sns.heatmap(
+        fc,
+        ax=ax,
+        center=0,
+        cmap="RdBu_r",
+        square=True,
+        cbar_kws=dict(label="Log fold change (COVID / Control)"),
+        annot=pvals,
+    )
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
+    r = {"0": "", "1": "*", "2": "**"}
+    for e in ax.get_children():
+        if isinstance(e, matplotlib.text.Text):
+            if e.get_text() in r:
+                e.set_text(r[e.get_text()])
+    fig.savefig(
+        c.results_dir / "percent_positive.per_marker.per_tissue.fold_change.heatmap.svg",
+        **c.figkws,
+    )
+    plt.close(fig)
+
     return 0
 
 
 def filter_cells_based_on_annotations(quant, plot=False):
+    """
+    Images with CD163 stain on maternal blood space may contain parts
+    of fetal vili, so polygons were drawn manually to identify the blood space only.
+    """
     import json
 
     from matplotlib.backends.backend_pdf import PdfPages
@@ -316,81 +404,6 @@ def filter_cells_based_on_annotations(quant, plot=False):
     )
 
     return quant.loc[~sel].append(pd.concat(_quant)).sort_values(["file"])
-
-
-def cd163():
-    def segment_stain(image):
-        import skimage
-
-        t = skimage.filters.threshold_otsu(image)
-        q = skimage.morphology.remove_small_objects(image > t, 5)
-        return skimage.morphology.dilation(q > t, skimage.morphology.disk(1))
-
-    images, annot = get_files(
-        input_dir=c.data_dir, exclude_patterns=["_old", "mask", "C_1", "fluo"]
-    )
-    annot = annot.query("marker == 'CD163'")
-    images = [i for i in images if i.fname in annot.index]
-
-    # Overal intensity
-    _int = dict()
-    for image in tqdm(images):
-        _int[image.fname] = image.decompose_hdab().mean((1, 2))
-    intensity = pd.DataFrame(_int, index=["hematoxilyn", "diaminobenzidine"]).T.join(
-        annot
-    )
-
-    # Segment stains
-    _pos = dict()
-    for image in tqdm(images):
-        h, d = image.decompose_hdab()
-        hem_mask = segment_stain(h)
-        dab_mask = segment_stain(d)
-        _pos[image.fname] = {
-            "hematoxilyn": hem_mask.sum() / hem_mask.size,
-            "diaminobenzidine": dab_mask.sum() / dab_mask.size,
-        }
-
-        fig, axes = plt.subplots(1, 3, sharex=True, sharey=True)
-        axes[0].imshow(image.image)
-        axes[1].imshow(hem_mask)
-        axes[2].imshow(dab_mask)
-        for ax in axes:
-            ax.axis("off")
-        fig.savefig(image.fname.replace(".tiff", ".stain_segmentation.svg"), **c.figkws)
-        plt.close(fig)
-
-    pos = pd.DataFrame(_pos).T.join(annot)
-    pos["tissue_name"] = pd.Categorical(
-        pos["tissue_name"], categories=c.tissues, ordered=True
-    )
-    pos["norm_diaminobenzidine"] = pos["diaminobenzidine"] / pos["hematoxilyn"]
-    pos["log_norm_diaminobenzidine"] = np.log(pos["norm_diaminobenzidine"])
-
-    # Plot
-    fig, axes = plt.subplots(4, 4, figsize=(4 * 2, 4 * 3), sharex=True, sharey="row")
-    for ax, tissue in zip(axes.T, c.tissues):
-        pp = pos.query(f"tissue_name == '{tissue}'")
-        _ = swarmboxenplot(
-            data=pp,
-            x="disease",
-            y=[
-                "hematoxilyn",
-                "diaminobenzidine",
-                "norm_diaminobenzidine",
-                "log_norm_diaminobenzidine",
-            ],
-            plot_kws=dict(palette="tab10"),
-            ax=ax,
-        )
-        ax[0].set(title=tissue)
-    fig.tight_layout()
-    fig.savefig(
-        c.results_dir
-        / "image_quantification.CD163.stain_segmentation.swarmboxenplot.svg",
-        **c.figkws,
-    )
-    plt.close(fig)
 
 
 def plot_deconvolution():
