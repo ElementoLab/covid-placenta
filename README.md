@@ -1,12 +1,9 @@
-# IHC analysis of placental tissue from COVID-19 patients
+# IHC analysis of placental tissue in COVID-19
 
-[![Zenodo badge](https://zenodo.org/badge/doi/___doi1___.svg)](https://doi.org/___doi1___)
-[![medRxiv badge](https://zenodo.org/badge/doi/__doi1___.svg)](https://doi.org/__doi1___) ⬅️ read the preprint here
+[![Zenodo badge](https://zenodo.org/badge/doi/10.5281/zenodo.5182825.svg)](https://doi.org/10.5281/zenodo.5182825) <- dataset repository
 
-
-**SARS-CoV-2 Infects Syncytiotrophoblast and Activates Inflammatory Responses in the Placenta**
-
-Argueta et al. 2021
+**Inflammatory Responses in the Placenta upon SARS-CoV-2 Infection Late in Pregnancy - analysis of IHC data**
+Lissenya B. Argueta*, Lauretta A. Lacko*, Yaron Bram*, Takuya Tada, Lucia Carrau, André Figueiredo Rendeiro, Tuo Zhang, Skyler Uhl, Brienne C. Lubor, Vasuretha Chandar, Cristianel Gil, Wei Zhang, Brittany Dodson, Jeroen Bastiaans, Malavika Prabhu, Sean Houghton, David Redmond, Christine M. Salvatore, Yawei J. Yang, Olivier Elemento, Rebecca N. Baergen, Benjamin R. tenOever, Nathaniel R. Landau, Shuibing Chen, Robert E. Schwartz, Heidi Stuhlmann. iScience 2022. doi:
 
 
 ## Organization
@@ -39,5 +36,3 @@ $ make analysis       # run the analysis scripts
 
 - Python 3.7+ (was run on 3.9.2)
 - Python packages as specified in the [requirements file](requirements.txt) - install with `make requirements` or `pip install -r requirements.txt`. It is paramount to have `scikit-image>=0.18.2`!
-
-Feel free to use some virtualization or compartimentalization software such as virtual environments or conda to install the requirements.
