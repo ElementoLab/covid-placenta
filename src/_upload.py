@@ -139,7 +139,7 @@ def delete(file: str, refresh: bool = False) -> None:
     assert r.ok, f"Error deleting file '{file}', with id '{file_id}'."
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and "get_ipython" not in locals():
     try:
         sys.exit(main())
     except KeyboardInterrupt:
