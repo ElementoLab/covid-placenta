@@ -3,7 +3,7 @@
 [![Zenodo badge](https://zenodo.org/badge/doi/10.5281/zenodo.5182825.svg)](https://doi.org/10.5281/zenodo.5182825) <- dataset repository
 
 **Inflammatory Responses in the Placenta upon SARS-CoV-2 Infection Late in Pregnancy - analysis of IHC data**
-Lissenya B. Argueta*, Lauretta A. Lacko*, Yaron Bram*, Takuya Tada, Lucia Carrau, André Figueiredo Rendeiro, Tuo Zhang, Skyler Uhl, Brienne C. Lubor, Vasuretha Chandar, Cristianel Gil, Wei Zhang, Brittany Dodson, Jeroen Bastiaans, Malavika Prabhu, Sean Houghton, David Redmond, Christine M. Salvatore, Yawei J. Yang, Olivier Elemento, Rebecca N. Baergen, Benjamin R. tenOever, Nathaniel R. Landau, Shuibing Chen, Robert E. Schwartz, Heidi Stuhlmann. iScience 2022. doi:
+Lissenya B. Argueta*, Lauretta A. Lacko*, Yaron Bram*, Takuya Tada, Lucia Carrau, André Figueiredo Rendeiro, Tuo Zhang, Skyler Uhl, Brienne C. Lubor, Vasuretha Chandar, Cristianel Gil, Wei Zhang, Brittany Dodson, Jeroen Bastiaans, Malavika Prabhu, Sean Houghton, David Redmond, Christine M. Salvatore, Yawei J. Yang, Olivier Elemento, Rebecca N. Baergen, Benjamin R. tenOever, Nathaniel R. Landau, Shuibing Chen, Robert E. Schwartz, Heidi Stuhlmann. iScience 2022. [doi:10.1016/j.isci.2022.104223](https://doi.org/10.1016/j.isci.2022.104223)
 
 
 ## Organization
